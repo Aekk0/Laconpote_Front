@@ -1,0 +1,10 @@
+<form #emailform="ngForm"(ngSubmit)="onSubmitForm(emailform)">
+
+    <label for="emailInput">E-mail :</label>
+    <input type="email" id="emailInput" [(ngModel)]="email" name="email">
+
+    <label for="passwordInput">Password :</label>
+    <input type="password" id="passwordInput" [(ngModel)]="password" name="password">
+
+    <button type="submit">OK!</button>
+</form>
