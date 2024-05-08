@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-index',
+  selector: 'app-index-tarkov',
   standalone: true,
   imports: [],
   templateUrl: './index.component.html',

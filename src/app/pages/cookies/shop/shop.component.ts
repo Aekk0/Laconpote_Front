@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-shop',
+  selector: 'app-shop-cookie',
   standalone: true,
   imports: [],
   templateUrl: './shop.component.html',

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-profil',
+  selector: 'app-profil-tarkov',
   standalone: true,
   imports: [],
   templateUrl: './profil.component.html',

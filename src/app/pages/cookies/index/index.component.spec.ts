@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IndexComponent } from './index.component';
+import { CookiesIndexComponent } from './index.component';
 
-describe('IndexComponent', () => {
-  let component: IndexComponent;
-  let fixture: ComponentFixture<IndexComponent>;
+describe('CookiesIndexComponent', () => {
+  let component: CookiesIndexComponent;
+  let fixture: ComponentFixture<CookiesIndexComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IndexComponent]
+      imports: [CookiesIndexComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(IndexComponent);
+    fixture = TestBed.createComponent(CookiesIndexComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-profil',
+  selector: 'app-profil-cookie',
   standalone: true,
   imports: [],
   templateUrl: './profil.component.html',
