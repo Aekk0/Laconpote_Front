@@ -1,6 +1,9 @@
+// Import Angular
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, lastValueFrom, of } from 'rxjs';
+
+// Import Third-Party
+import { BehaviorSubject, lastValueFrom, shareReplay } from 'rxjs';
 
 export interface AuthenticateOptions {
   email: string;
@@ -12,7 +15,8 @@ export interface AuthenticateOptions {
 })
 export class AuthService {
   private authURL = "http://localhost:3001/api/v1/auth";
-  private userURL = "http://localhost:3001/api/v1/user"
+  private userURL = "http://localhost:3001/api/v1/user";
+
   currentUserSubject = new BehaviorSubject(null);
 
   constructor(private http: HttpClient) {
@@ -24,8 +28,10 @@ export class AuthService {
     // const password = options.password
     // const email = "foo@gmail.com";
     // const password = "password";
-     
-    const authData = await lastValueFrom<any>(this.http.post(this.authURL, { email, password, includeUserData: true }));
+
+    const authData = await lastValueFrom<any>(this.http.post(this.authURL, { email, password, includeUserData: true }).pipe(
+      shareReplay(1)
+    ));
 
     localStorage.setItem("access_token", authData.accessToken);
     localStorage.setItem("refresh_token", authData.refreshToken);
@@ -45,7 +51,7 @@ export class AuthService {
   public async update(options?: any) {
     const email = "bar@gmail.com";
     const userId = 3;
-    
+
     const user = await lastValueFrom(this.http.patch(`${this.userURL}/${userId}`, [
       {
         op: "replace",
@@ -56,13 +62,11 @@ export class AuthService {
       headers: {
         authorization: `Bearer ${options.accessToken}`
       }
-    }));
+    }).pipe(
+      shareReplay(1)
+    ));
 
     this.setUser(user);
-  }
-
-  getCurrentUser(): Observable<any> {
-    return this.currentUserSubject.asObservable();
   }
 
   setUser(user: any): void {
