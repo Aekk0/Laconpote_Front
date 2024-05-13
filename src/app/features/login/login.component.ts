@@ -1,6 +1,8 @@
+// Import Angular
 import { Component } from '@angular/core';
-import { NgModule } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+
+// Import Internal
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -16,12 +18,10 @@ export class LoginComponent {
   email: string = "";
 
   constructor(private authService: AuthService) {
-    
+
   }
 
   async onSubmitForm(form: NgForm): Promise<void> {
-
     await this.authService.authenticate(form.value);
-
   }
 }
