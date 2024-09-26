@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { LoginComponent } from '../../features/login/login.component';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [LoginComponent],
+  imports: [LoginComponent, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

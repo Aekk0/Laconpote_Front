@@ -1,0 +1,42 @@
+ .footer {
+    height: 14vh;
+    background: #e8aabe;
+    margin-top: 0px;
+    
+}
+.footer-section {
+    margin: 0 auto;
+    flex: auto;
+}
+
+.footer-section p {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+}
+
+.footer-links li {
+    margin: 0 25px;
+    display: inline-block;
+}
+
+.footer-links a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+ul {
+    margin-top: auto;
+}

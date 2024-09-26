@@ -1,13 +1,5 @@
 <app-header></app-header>
-
-<h1>{{ title }}</h1>
-<h2>Tarkov Site</h2>
-<nav>
-    <a routerLink="tarkov" routerLinkActive="Tarkov" ariaCurrentWhenActive="page">Escape From Tarkov</a>
-</nav>
-<nav>
-    <a routerLink="cookies" routerLinkActive="cookies" ariaCurrentWhenActive="page">Cookies</a>
-</nav>
-
-<app-footer></app-footer>
-<router-outlet></router-outlet>
+<div class="content">
+    <router-outlet></router-outlet>
+</div>
+<app-footer class="footer"></app-footer>

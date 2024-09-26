@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-galerie',
+  selector: 'app-cgv',
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
-  templateUrl: './galerie.component.html',
-  styleUrl: './galerie.component.css'
+  templateUrl: './cgv.component.html',
+  styleUrl: './cgv.component.css'
 })
-export class CookiesGalerieComponent {
+export class CgvComponent {
 
 }

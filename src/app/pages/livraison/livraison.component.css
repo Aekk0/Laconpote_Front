@@ -1,0 +1,13 @@
+.container {
+    background-image: url("../../../assets/background2.webp");
+    background-size: cover;
+    height: 86vh;
+}
+
+.text {
+    text-align: center;
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-top: 2%;
+}
+
