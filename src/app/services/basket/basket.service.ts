@@ -34,6 +34,18 @@ export class BasketService {
     this.setBasket(result);
   }
 
+  public async increase() {
+
+  }
+
+  public async decrease() {
+
+  }
+
+  public async removeProduct(productId: string) {
+    
+  }
+
   getCurrentBasket(): Observable<any> {
     return this.currentBasketSubject.asObservable();
   }
