@@ -1,17 +1,21 @@
- .footer {
-    height: 14vh;
+.footer {
+    height: calc(100vh - 84vh - 4vh);
     background: #e8aabe;
     margin-top: 0px;
+    display: flex;
     
 }
+
 .footer-section {
     margin: 0 auto;
-    flex: auto;
+
 }
 
 .footer-section p {
     font-size: 18px;
     margin-bottom: 15px;
+    margin-top: 17px;
+    width: 30%;
 }
 
 .footer-links {
@@ -39,4 +43,14 @@
 
 ul {
     margin-top: auto;
+}
+
+h3 {
+    margin-top: 5px;
+    margin-bottom: 1px;
+}
+
+.text {
+    margin-right: 17px;
+    width: 70%;
 }
