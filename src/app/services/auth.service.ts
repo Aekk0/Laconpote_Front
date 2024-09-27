@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, lastValueFrom, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 export interface AuthenticateOptions {
   email: string;
@@ -11,61 +12,62 @@ export interface AuthenticateOptions {
   providedIn: 'root'
 })
 export class AuthService {
-  private authURL = "http://localhost:3001/api/v1/auth";
-  private userURL = "http://localhost:3001/api/v1/user"
+  private authURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/auth";
+  private userURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/user"
   currentUserSubject = new BehaviorSubject(null);
+
+  public user$ = this.currentUserSubject.asObservable();
+
 
   constructor(private http: HttpClient) {
   }
 
   public async authenticate(options: AuthenticateOptions) {
     const { email, password } = options;
-    // const email = options.email;
-    // const password = options.password
-    // const email = "foo@gmail.com";
-    // const password = "password";
      
-    const authData = await lastValueFrom<any>(this.http.post(this.authURL, { email, password, includeUserData: true }));
+    return this.http.post(this.authURL, { email, password, includeUserData: true }).pipe(
+      tap(authData => {
+        this.currentUserSubject.next(authData as any);
+        localStorage.setItem("access_token", (authData as any).accessToken);
+        localStorage.setItem("refresh_token", (authData as any).refreshToken);
+        localStorage.setItem("expire_in", (authData as any).expireIn);
+      })
+    );
+  }
 
-    localStorage.setItem("access_token", authData.accessToken);
-    localStorage.setItem("refresh_token", authData.refreshToken);
-    localStorage.setItem("expire_in", authData.expireIn);
+  setData(authData: any) {
+    this.currentUserSubject.next(authData);
+    localStorage.setItem("access_token", (authData as any).accessToken);
+    localStorage.setItem("refresh_token", (authData as any).refreshToken);
+    localStorage.setItem("expire_in", (authData as any).expireIn); 
+  }
 
-    this.setUser(authData.userData);
+  getState(): any {
+    return this.currentUserSubject.getValue(); // Return the latest state value
   }
 
   public async logout() {
     // CLEAR LOCAL STORAGE
   }
 
-  public async create() {
+  public async register(options: any) {
     //
   }
 
-  public async update(options?: any) {
-    const email = "bar@gmail.com";
-    const userId = 3;
+  // public async update(options?: any) {
+  //   const email = "bar@gmail.com";
+  //   const userId = 3;
     
-    const user = await lastValueFrom(this.http.patch(`${this.userURL}/${userId}`, [
-      {
-        op: "replace",
-        path: "/email",
-        value: email
-      }
-    ], {
-      headers: {
-        authorization: `Bearer ${options.accessToken}`
-      }
-    }));
-
-    this.setUser(user);
-  }
-
-  getCurrentUser(): Observable<any> {
-    return this.currentUserSubject.asObservable();
-  }
-
-  setUser(user: any): void {
-    this.currentUserSubject.next(user);
-  }
+  //   const user = await lastValueFrom(this.http.patch(`${this.userURL}/${userId}`, [
+  //     {
+  //       op: "replace",
+  //       path: "/email",
+  //       value: email
+  //     }
+  //   ], {
+  //     headers: {
+  //       authorization: `Bearer ${options.accessToken}`
+  //     }
+  //   }));
+  // }
 }

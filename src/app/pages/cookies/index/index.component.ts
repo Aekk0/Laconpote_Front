@@ -19,7 +19,7 @@ export class CookiesIndexComponent {
   }
 
   async init() {
-    this.authService.getCurrentUser().subscribe((user) => this.user = user);
+    this.authService.user$.subscribe((user: any) => this.user = user);
 
     console.log("BEFORE UPDATE", this.user);
     const accessToken = localStorage.getItem("access_token");

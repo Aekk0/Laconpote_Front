@@ -20,6 +20,8 @@ export class LoginComponent {
   confirmPassword: string = "";
   email: string = "";
 
+  error: string | null = null;
+
   constructor(
     private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -38,13 +40,25 @@ export class LoginComponent {
     this.login = true;
   }
 
-  async onSubmitForm(form: NgForm): Promise<void> {
-    await this.authService.authenticate(form.value);
+  async onSubmitRegistration(form: NgForm): Promise<void> {
+    await this.authService.register(form.value);
     if (form.valid && this.password === this.confirmPassword) {
-      console.log('Form submitted successfully!');
+      this.dialogRef.close();
     } else {
-      console.error('Form invalid or passwords do not match');
+      this.error = "Missing email or password";
     }
+  }
+
+  async onSubmitLogin(form: NgForm): Promise<void> {
+    if (form.valid && this.password) {
+      this.dialogRef.close();
+    }
+    else {
+      this.error = "Missing email or password";
+    }
+
+    const user = await this.authService.authenticate(form.value);
+    this.authService.setData(user);
   }
 
   onNoClick(): void {
