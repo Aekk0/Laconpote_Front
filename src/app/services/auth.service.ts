@@ -67,11 +67,7 @@ export class AuthService {
   }
 
   public async register(options: RegisterOptions) {
-    return this.http.post(this.authURL, options).pipe(
-      tap(__ => {
-        return this.authenticate({ email: options.email, password: options.password })
-      })
-    );
+    return this.http.post(this.authURL, options);
   }
 
   public async update(options: UpdateOptions) {
