@@ -16,6 +16,5 @@ export class HomeComponent {
 
   constructor(private authService: AuthService) {
     this.authService.user$.subscribe((user: any) => this.user = user);
-    console.log(this.user);
   }
 }

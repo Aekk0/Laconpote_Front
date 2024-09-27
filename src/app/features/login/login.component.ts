@@ -17,6 +17,8 @@ export class LoginComponent {
 
   login: boolean = true;
   password: string = "";
+  firstName: string = "";
+  lastName: string = "";
   confirmPassword: string = "";
   email: string = "";
 
@@ -27,13 +29,13 @@ export class LoginComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Inject(MatDialogRef) public dialogRef: MatDialogRef<LoginComponent>
   ) {
-    
+
   }
 
   changeState() {
     if (this.login === true) {
       this.login = false;
-      
+
       return;
     }
 
@@ -42,7 +44,7 @@ export class LoginComponent {
 
   async onSubmitRegistration(form: NgForm): Promise<void> {
     await this.authService.register(form.value);
-    if (form.valid && this.password === this.confirmPassword) {
+    if (form.valid && this.password === this.confirmPassword && this.firstName && this.lastName) {
       this.dialogRef.close();
     } else {
       this.error = "Missing email or password";

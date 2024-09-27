@@ -6,6 +6,10 @@
     <label for="passwordInput">Mot de passe :</label>
     <input type="password" id="passwordInput" [(ngModel)]="password" name="password">
 
+    <div *ngIf="error !== null">
+      {{ error }}
+  </div>
+
     <button type="submit">Se connecter</button>
     <button (click)="changeState()">S'enregistrer</button>
 </form>
@@ -20,6 +24,13 @@
 
     <label for="confirmPasswordInput">Confirmer le mot de passe :</label>
     <input type="password" id="confirmPasswordInput" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+
+
+    <label for="firstNameInput">Prénom :</label>
+    <input type="firstName" id="firstNameInput" [(ngModel)]="firstName" name="firstName">
+
+    <label for="lastNameInput">Prénom :</label>
+    <input type="lastName" id="lastNameInput" [(ngModel)]="lastName" name="lastName">
 
     <div *ngIf="password !== confirmPassword && emailform.submitted">
         <p style="color:red;">Les mots de passe ne correspondent pas.</p>

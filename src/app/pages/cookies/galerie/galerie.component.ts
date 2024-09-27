@@ -16,10 +16,5 @@ export class CookiesGalerieComponent {
     private authService: AuthService
   ) {
     this.authService.user$.subscribe((user: any) => this.user = user);
-    console.log(this.user);
-    if(!this.user || this.user === null) {
-      const foo = localStorage.getItem("accessToken");
-      console.log("hrehhe", foo);
-    }
   }
 }

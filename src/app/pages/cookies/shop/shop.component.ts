@@ -24,10 +24,6 @@ export class CookiesShopComponent implements OnInit {
     private productService: ProductService
   ) {
     this.authService.user$.subscribe((user: any) => this.user = user);
-    console.log("FOO", this.user);
-    const foo = this.authService.getState();
-
-    console.log("BABRABA", foo);
   }
 
   ngOnInit() {
