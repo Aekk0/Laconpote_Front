@@ -3,13 +3,11 @@
     padding: 0;
     font-family: Arial, sans-serif;
     height: 100%;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
 }
 
 #home {
     display: flex;
-    height: 86vh;
+    height: calc(100vh - 12vh - 4vh);
 }
 
 .section {

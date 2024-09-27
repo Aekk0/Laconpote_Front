@@ -1,13 +1,23 @@
 .container {
     background-image: url("../../../assets/background2.webp");
     background-size: cover;
-    height: 86vh;
+    height: calc(100vh - 12vh - 4vh);
 }
 
 .text {
     text-align: center;
-    padding-left: 25%;
-    padding-right: 25%;
+    padding-left: 22%;
+    padding-right: 22%;
     padding-top: 2%;
 }
 
+p {
+    margin-top:  60px;
+    margin-bottom: 60px;
+    font-size: 16px;
+    line-height: 150%;
+}
+
+h1 {
+    padding-top: 2%;
+}
