@@ -1,13 +1,13 @@
 
-    <div class="header">
-        <div class="container">
+    <div class="container">
+        <div class="header">
             <nav>
                 <ul>
                     <li><a onclick="location.href='cookies'" routerLink="cookies" routerLinkActive="cookies" ariaCurrentWhenActive="page">Accueil</a></li>
                     <li><a onclick="location.href='cookies/galerie'" routerLink="galerie" routerLinkActive="galerie" ariaCurrentWhenActive="page">Galerie</a></li>
                     <li><a onclick="location.href='cookies/boutique'" routerLink="boutique" routerLinkActive="boutique" ariaCurrentWhenActive="page">Boutique</a></li>
                     <li *ngIf="user !== null"><a onclick="location.href='profil'" routerLink="profil" routerLinkActive="profil" ariaCurrentWhenActive="page">Profil</a></li>
-                    <li *ngIf="user === null"><a onclick="location.href='login'" routerLink="login" routerLinkActive="login" ariaCurrentWhenActive="page">Se connnecter</a></li>
+                    <li *ngIf="user === null"><button (click)="openLogin()">Se connnecter/S'enregistrer</button></li>
                 </ul>
             </nav>
         </div>

@@ -8,14 +8,8 @@ nav ul{
 nav li{
     margin: 0 1rem;
     float: left;
-    width: 33%;
+    width: 25%;
     text-align: center;
-}
-
-nav ul::after{
-    content: "";
-    display: table;
-    clear: both;
 }
 
 nav{
@@ -31,8 +25,8 @@ nav a{
     display: block;
     text-decoration: none;
     color: black;
-    border-bottom: 2px solid transparent;
-    padding: 10px 0px;
+    border: 2px solid transparent;
+    padding: 12px 0px;
     font-size: 20px;
     cursor: pointer;
 }
@@ -44,3 +38,24 @@ nav a:hover{
     border-right:2px solid #db6a8f;
 }
 
+.header {
+    height: calc(100vh - 12vh - 84vh);
+}
+
+nav button {
+    display: block;
+    text-decoration: none;
+    color: black;
+    border: 2px solid transparent;
+    padding: 10px 0px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #e8aabe;
+}
+
+nav button:hover{
+    color: #db6a8f;
+    border-bottom: 2px solid #db6a8f;
+    border-left:2px solid #db6a8f;
+    border-right:2px solid #db6a8f;
+}
