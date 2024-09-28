@@ -1,18 +1,16 @@
 <div class="container">
     <main id="home">
-        <div class="section gauche" onclick="location.href='tarkov'">
+        <div class="section gauche" [routerLink]="['/tarkov']">
             <nav>
-                <h2><a routerLink="tarkov" routerLinkActive="Tarkov" ariaCurrentWhenActive="page">Escape From Tarkov</a></h2>
+                <h2><a [routerLink]="['/tarkov']">Escape From Tarkov</a></h2>
                 <p>PiouPiou</p>
             </nav>
         </div>
-        <div class="section droite" onclick="location.href='cookies'">
+        <div class="section droite" [routerLink]="['/cookies']">
             <nav>
-                <h2><a routerLink="cookies" routerLinkActive="cookies" ariaCurrentWhenActive="page">Cookies</a></h2>
+                <h2><a [routerLink]="['/cookies']">Cookies</a></h2>
                 <p>NiomNiom</p>
             </nav>
         </div>
     </main>
 </div>
-
-<!-- <app-login></app-login> -->
