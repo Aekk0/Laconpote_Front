@@ -81,7 +81,7 @@ export class BasketComponent implements OnInit {
       environment: "production"
     })
 
-    if (this.totalPrice > 0 && (this.user && this.user.addresses.length > 0) && this.addressSelected !== null) {
+    if (this.totalPrice > 0 && (this.user && (this.user.address && this.user.addresses.length > 0)) && this.addressSelected !== null) {
       await (this.paypal as PayPalNamespace).Buttons!({
         createOrder: (data, actions) => {
           return actions.order.create({
@@ -185,7 +185,7 @@ export class BasketComponent implements OnInit {
       this.order.totalPrice = this.totalPrice;
       this.order.address_id = this.addressSelected === null ? null : this.addressSelected.id;
 
-      if (this.div.nativeElement.children.length > 0) {
+      if (this.div.nativeElement.children && this.div.nativeElement.children.length > 0) {
         this.div.nativeElement.children[this.index].style = "display: none;";
         this.index++;
       }
