@@ -112,7 +112,5 @@ export class CookiesShopComponent implements OnInit {
         quantity: 0
       }
     });
-
-    console.log(this.basket, this.basket.length);
   }
 }
