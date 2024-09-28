@@ -204,28 +204,28 @@ export class BasketComponent implements OnInit {
             ]
           })
         },
-        onApprove: (data, actions) => {
-          return actions.order!.capture().then((details) => {
-            this.orderService.createOrder({
+        onApprove: async (data, actions) => {
+          try {
+            const details = await actions.order!.capture();
+            console.log("Transaction completed:", details);
+
+            await this.orderService.createOrder({
               ...this.order,
-              products: {
-                ...this.order.products.map((product: any) => {
-                  return {
-                    id: product.id,
-                    name: product.name,
-                    description: product.description,
-                    price: product.price
-                  }
-                })
-              }
+              products: this.order.products.map((product: any) => ({
+                id: product.id,
+                name: product.name,
+                description: product.description,
+                price: product.price
+              }))
             });
 
             this.basketService.setBasket(null);
 
-            console.log("Transaction completed:", details);
-
             alert("Transaction Completed");
-          });
+          } catch (error) {
+            console.error("Order creation failed:", error);
+            alert("Transaction Completed, but order creation failed.");
+          }
         },
         onError: (error) => {
           console.error("PAYPAL error:", error);
