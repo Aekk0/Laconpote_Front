@@ -24,19 +24,6 @@ export class BasketComponent implements OnInit {
   }
 
   async init() {
-    await this.basketService.update([
-      {
-        name: "foo",
-        price: 1,
-        quantity: 1
-      },
-      {
-        name: "bar",
-        price: 2,
-        quantity: 1
-      }
-    ]);
-
     this.paypal = await loadScript({
       clientId: "AZH51tMmdx9bTphwRFBT7T9T-fbrUkcKSGdRKqbaekKDjO5QOXL7idPYFA1OwLW1d0f4OIZ7ay-nXuxq"
     })
