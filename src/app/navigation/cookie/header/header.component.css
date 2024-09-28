@@ -33,9 +33,6 @@ nav a{
 
 nav a:hover{
     color: #db6a8f;
-    border-bottom: 2px solid #db6a8f;
-    border-left:2px solid #db6a8f;
-    border-right:2px solid #db6a8f;
 }
 
 .header {
@@ -56,7 +53,4 @@ nav button {
 
 nav button:hover{
     color: #db6a8f;
-    border-bottom: 2px solid #db6a8f;
-    border-left:2px solid #db6a8f;
-    border-right:2px solid #db6a8f;
 }

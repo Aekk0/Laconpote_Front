@@ -7,11 +7,14 @@ import { lastValueFrom } from 'rxjs';
 })
 export class ProductService {
   private productURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/product";
+  products: any;
 
   constructor(private http: HttpClient) { }
 
   public async getAll() {
     const products = await lastValueFrom(this.http.get(this.productURL));
+
+    this.products = products;
 
     return products;
   }

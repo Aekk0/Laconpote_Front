@@ -12,19 +12,6 @@ import { CgvComponent } from './pages/cgv/cgv.component';
 import { LivraisonComponent } from './pages/livraison/livraison.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { ProfilComponent } from './pages/profil/profil.component';
-import { BlancnoisetteComponent } from './pages/produits/blancnoisette/blancnoisette.component';
-import { CacahuetegourmandeComponent } from './pages/produits/cacahuetegourmande/cacahuetegourmande.component';
-import { ChocobananeComponent } from './pages/produits/chocobanane/chocobanane.component';
-import { ChocoblancComponent } from './pages/produits/chocoblanc/chocoblanc.component';
-import { ChococolorComponent } from './pages/produits/chococolor/chococolor.component';
-import { ChocolaitComponent } from './pages/produits/chocolait/chocolait.component';
-import { ChoconoirComponent } from './pages/produits/choconoir/choconoir.component';
-import { ChocoplaisirComponent } from './pages/produits/chocoplaisir/chocoplaisir.component';
-import { CrousticocoComponent } from './pages/produits/crousticoco/crousticoco.component';
-import { FraisicroqComponent } from './pages/produits/fraisicroq/fraisicroq.component';
-import { IntensechocoComponent } from './pages/produits/intensechoco/intensechoco.component';
-import { KinderfusionComponent } from './pages/produits/kinderfusion/kinderfusion.component';
-import { TriplechocoComponent } from './pages/produits/triplechoco/triplechoco.component';
 import { BasketComponent } from './pages/basket/basket/basket.component';
 import { ProductsComponent } from './pages/produits/products/products.component';
 
@@ -73,6 +60,11 @@ export const routes: Routes = [
             }
         ]
     },
+    
+    {
+        path: "product/:id",
+        component: ProductsComponent
+    },
     {
         path: "cgv",
         component: CgvComponent
@@ -88,61 +80,5 @@ export const routes: Routes = [
     {
         path: "profil",
         component: ProfilComponent
-    },
-    {
-        path: "produits/blancnoisette",
-        component: BlancnoisetteComponent
-    },
-    {
-        path: "produits/cacahuetegourmande",
-        component: CacahuetegourmandeComponent
-    },
-    {
-        path: "produits/chocobanane",
-        component: ChocobananeComponent
-    },
-    {
-        path: "produits/chocoblanc",
-        component: ChocoblancComponent
-    },
-    {
-        path: "produits/chococolor",
-        component: ChococolorComponent
-    },
-    {
-        path: "produits/chocolait",
-        component: ChocolaitComponent
-    },
-    {
-        path: "produits/choconoir",
-        component: ChoconoirComponent
-    },
-    {
-        path: "produits/chocoplaisir",
-        component: ChocoplaisirComponent
-    },
-    {
-        path: "produits/croustichoco",
-        component: CrousticocoComponent
-    },
-    {
-        path: "produits/fraisicroq",
-        component: FraisicroqComponent
-    },
-    {
-        path: "produits/intensechoco",
-        component: IntensechocoComponent
-    },
-    {
-        path: "produits/kinderfusion",
-        component: KinderfusionComponent
-    },
-    {
-        path: "produits/triplechoco",
-        component: TriplechocoComponent
-    },
-    {
-        path: "produits/products",
-        component: ProductsComponent
     }
 ];

@@ -1,1 +1,15 @@
-<p>products works!</p>
+<div class="container">
+    <main>
+        <div *ngIf="input !== null">
+            <h1>{{ input?.name }}</h1>
+            <p>
+                Ingrédients : {{ input?.ingredients!.join(", ") }} <br>
+                *Allergènes : {{ input?.allergens!.join(", ")}}
+            </p>
+        </div>
+
+        <div *ngIf="input === null">
+            No available selection
+        </div>
+    </main>
+</div>
