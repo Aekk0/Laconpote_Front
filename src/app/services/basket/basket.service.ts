@@ -34,7 +34,7 @@ export class BasketService {
         continue;
       }
 
-      delete products[index];
+      currents = currents?.splice(index, 1);
       result.push({
         ...product,
         quantity: product.quantity + sameProduct.quantity
@@ -43,7 +43,7 @@ export class BasketService {
       index++;
     }
 
-    this.setBasket(result);
+    this.setBasket([...result, ...currents]);
   }
 
   public async increase(product: Product) {

@@ -52,7 +52,7 @@ export class CookiesShopComponent implements OnInit {
         exist = true;
 
         if (this.stateLessBasket[index].quantity === 1) {
-          this.stateLessBasket = this.stateLessBasket.splice(index, 1);
+          this.stateLessBasket.splice(index, 1);
         }
         else {
           this.stateLessBasket[index] = { ...product, quantity: product.quantity - 1 };
@@ -63,6 +63,8 @@ export class CookiesShopComponent implements OnInit {
     }
 
     if (!exist) {
+      this.stateLessBasket.push(product);
+
       return
     }
 
@@ -73,6 +75,8 @@ export class CookiesShopComponent implements OnInit {
 
       return ite;
     });
+
+    console.log("DECREASE", this.stateLessBasket);
   }
 
   increaseProductQuantity(product: any) {
