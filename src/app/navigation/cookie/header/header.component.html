@@ -6,6 +6,7 @@
                     <li><a [routerLink]="['/cookies']">Accueil</a></li>
                     <li><a [routerLink]="['/cookies/galerie']">Galerie</a></li>
                     <li><a [routerLink]="['/cookies/boutique']">Boutique</a></li>
+                    <li><a [routerLink]="['/cookies/basket']">Panier</a></li>
                     <li *ngIf="user && user !== null"><a [routerLink]="['/profil']">Profil</a></li>
                     <li *ngIf="!user || user === null"><button (click)="openLogin()">Se connnecter/S'enregistrer</button></li>
                 </ul>

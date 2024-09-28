@@ -1,0 +1,23 @@
+*{
+  margin:0px;
+  padding:0px;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+background-color: #f4f4f4;
+}
+
+main {
+  padding: 2rem;
+}
+
+.container {
+  background-image: url("../../../../assets/background.webp");
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center center;
+  height: 100%;
+}

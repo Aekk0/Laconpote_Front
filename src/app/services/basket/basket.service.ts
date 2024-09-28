@@ -12,15 +12,21 @@ export class BasketService {
   constructor() { }
 
   public async update(products: Product[]) {
-    let currents = null;
+    let currents: undefined | Product[];
 
     this.getCurrentBasket().subscribe((basket) => currents = basket);
 
     const result = [];
 
+    if (!currents) {
+      this.setBasket(products);
+
+      return;
+    }
+
     let index = 0;
     for (const product of products) {
-      const sameProduct = currents!.find((current: any) => current.id === product["id"]);
+      const sameProduct = currents.find((current: any) => current.id === product["id"]);
 
       if (!sameProduct) {
         result.push(product);

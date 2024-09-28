@@ -25,7 +25,7 @@ import { FraisicroqComponent } from './pages/produits/fraisicroq/fraisicroq.comp
 import { IntensechocoComponent } from './pages/produits/intensechoco/intensechoco.component';
 import { KinderfusionComponent } from './pages/produits/kinderfusion/kinderfusion.component';
 import { TriplechocoComponent } from './pages/produits/triplechoco/triplechoco.component';
-
+import { BasketComponent } from './pages/basket/basket/basket.component';
 
 export const routes: Routes = [
     {
@@ -50,7 +50,7 @@ export const routes: Routes = [
             }
         ]
     },
-    { 
+    {
         path: "cookies",
         component: CookiesComponent,
         children: [
@@ -65,126 +65,79 @@ export const routes: Routes = [
             {
                 path:"galerie",
                 component: CookiesGalerieComponent
+            },
+            {
+              path: "basket",
+              component: BasketComponent
             }
         ]
     },
     {
         path: "cgv",
-        component: CgvComponent,
-        children: [
-            
-        ]
+        component: CgvComponent
     },
     {
         path: "livraison",
-        component: LivraisonComponent,
-        children: [
-            
-        ]
+        component: LivraisonComponent
     },
     {
         path: "contact",
-        component: ContactComponent,
-        children: [
-            
-        ]
+        component: ContactComponent
     },
     {
         path: "profil",
-        component: ProfilComponent,
-        children: [
-            
-        ]
+        component: ProfilComponent
     },
     {
         path: "blancnoisette",
-        component: BlancnoisetteComponent,
-        children: [
-            
-        ]
+        component: BlancnoisetteComponent
     },
     {
         path: "cacahuetegourmande",
-        component: CacahuetegourmandeComponent,
-        children: [
-            
-        ]
+        component: CacahuetegourmandeComponent
     },
     {
         path: "chocobanane",
-        component: ChocobananeComponent,
-        children: [
-            
-        ]
+        component: ChocobananeComponent
     },
     {
         path: "chocoblanc",
-        component: ChocoblancComponent,
-        children: [
-            
-        ]
+        component: ChocoblancComponent
     },
     {
         path: "chococolor",
-        component: ChococolorComponent,
-        children: [
-            
-        ]
+        component: ChococolorComponent
     },
     {
         path: "chocolait",
-        component: ChocolaitComponent,
-        children: [
-            
-        ]
+        component: ChocolaitComponent
     },
     {
         path: "choconoir",
-        component: ChoconoirComponent,
-        children: [
-            
-        ]
+        component: ChoconoirComponent
     },
     {
         path: "chocoplaisir",
-        component: ChocoplaisirComponent,
-        children: [
-            
-        ]
+        component: ChocoplaisirComponent
     },
     {
         path: "croustichoco",
-        component: CrousticocoComponent,
-        children: [
-            
-        ]
+        component: CrousticocoComponent
     },
     {
         path: "fraisicroq",
-        component: FraisicroqComponent,
-        children: [
-            
-        ]
+        component: FraisicroqComponent
     },
     {
         path: "intensechoco",
-        component: IntensechocoComponent,
-        children: [
-            
-        ]
+        component: IntensechocoComponent
     },
     {
         path: "kinderfusion",
-        component: KinderfusionComponent,
-        children: [
-            
-        ]
+        component: KinderfusionComponent
     },
     {
         path: "triplechoco",
-        component: TriplechocoComponent,
-        children: [
-            
-        ]
+        component: TriplechocoComponent
     }
 ];
