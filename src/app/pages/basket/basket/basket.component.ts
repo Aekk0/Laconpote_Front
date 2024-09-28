@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-basket',
@@ -28,10 +29,14 @@ export class BasketComponent implements OnInit {
   basket: any[] = [];
   totalPrice: number = 0;
   index = 0;
+  paypalClientId = environment.paypalClientID;
+  user:any;
 
   constructor(
-    private basketService: BasketService
+    private basketService: BasketService,
+    private authService: AuthService
   ) {
+    this.authService.user$.subscribe((user: any) => this.user = user);
     this.basketService.getCurrentBasket().subscribe((basket) => this.basket = basket);
 
     if (this.basket !== null) {
@@ -48,11 +53,11 @@ export class BasketComponent implements OnInit {
   async init() {
     this.paypal = await loadScript({
       currency: "EUR",
-      clientId: environment.paypalClientID,
+      clientId: this.paypalClientId,
       environment: "production"
     })
 
-    if (this.totalPrice > 0) {
+    if (this.totalPrice > 0 && this.user) {
       await (this.paypal as PayPalNamespace).Buttons!({
         createOrder: (data, actions) => {
           return actions.order.create({
@@ -69,14 +74,12 @@ export class BasketComponent implements OnInit {
         },
         onApprove: (data, actions) => {
           return actions.order!.capture().then((details) => {
-            console.log("Transaction completed:", details);
+            this.basketService.setBasket(null);
 
             alert("Transaction Completed");
           });
         },
         onError: (error) => {
-          console.error("PAYPAL error:", error);
-
           alert("Transaction Failed");
         }
       }).render("#paypal-button-container");
@@ -131,42 +134,44 @@ export class BasketComponent implements OnInit {
   }
 
   async updatePricing() {
-    this.totalPrice = 0;
-    if (this.basket !== null) {
-      for (const product of this.basket) {
-        this.totalPrice = this.totalPrice + (product.quantity * product.price)
+    if (this.user) {
+      this.totalPrice = 0;
+      if (this.basket !== null) {
+        for (const product of this.basket) {
+          this.totalPrice = this.totalPrice + (product.quantity * product.price)
+        }
       }
-    }
 
-    this.div.nativeElement.children[this.index].style = "display: none;";
-    this.index++;
+      this.div.nativeElement.children[this.index].style = "display: none;";
+      this.index++;
 
-    await (this.paypal as PayPalNamespace).Buttons!({
-      createOrder: (data, actions) => {
-        return actions.order.create({
-          intent: "CAPTURE",
-          purchase_units: [
-            {
-              amount: {
-                currency_code: "EUR",
-                value: String(this.totalPrice)
+      await (this.paypal as PayPalNamespace).Buttons!({
+        createOrder: (data, actions) => {
+          return actions.order.create({
+            intent: "CAPTURE",
+            purchase_units: [
+              {
+                amount: {
+                  currency_code: "EUR",
+                  value: String(this.totalPrice)
+                }
               }
-            }
-          ]
-        })
-      },
-      onApprove: (data, actions) => {
-        return actions.order!.capture().then((details) => {
-          console.log("Transaction completed:", details);
+            ]
+          })
+        },
+        onApprove: (data, actions) => {
+          return actions.order!.capture().then((details) => {
+            console.log("Transaction completed:", details);
 
-          alert("Transaction Completed");
-        });
-      },
-      onError: (error) => {
-        console.error("PAYPAL error:", error);
+            alert("Transaction Completed");
+          });
+        },
+        onError: (error) => {
+          console.error("PAYPAL error:", error);
 
-        alert("Transaction Failed");
-      }
-    }).render("#paypal-button-container");
+          alert("Transaction Failed");
+        }
+      }).render("#paypal-button-container");
+    }
   }
 }

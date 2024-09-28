@@ -15,9 +15,6 @@ export class ProfilComponent {
   constructor(
     private authService: AuthService
   ) {
-
-  }
-
-  ngOnInit() {
+    this.authService.user$.subscribe((user: any) => this.user = user);
   }
 }

@@ -5,7 +5,6 @@ import {MatDialog} from '@angular/material/dialog';
 
 import { AuthService } from '../../../services/auth.service';
 import { LoginComponent } from '../../../features/login/login.component';
-import { BasketService } from '../../../services/basket/basket.service';
 
 @Component({
   selector: 'app-header',
@@ -19,7 +18,6 @@ export class HeaderComponent {
 
   constructor(
     private authService: AuthService,
-    private basketService: BasketService,
     @Inject(MatDialog) public dialog: MatDialog
   ) {
     this.authService.user$.subscribe((user: any) => this.user = user);

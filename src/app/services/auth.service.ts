@@ -31,7 +31,6 @@ export class AuthService {
 
   public user$ = this.currentUserSubject.asObservable();
 
-
   constructor(private http: HttpClient) {
   }
 
@@ -48,15 +47,29 @@ export class AuthService {
     );
   }
 
-  setData(authData: any) {
-    this.currentUserSubject.next(authData);
-    localStorage.setItem("access_token", (authData as any).accessToken);
-    localStorage.setItem("refresh_token", (authData as any).refreshToken);
-    localStorage.setItem("expire_in", (authData as any).expireIn);
+  setData(authData$: any) {
+    authData$.subscribe((authData: any) => {
+      this.currentUserSubject.next(authData);
+      localStorage.setItem("access_token", (authData as any).accessToken);
+      localStorage.setItem("refresh_token", (authData as any).refreshToken);
+      localStorage.setItem("expire_in", (authData as any).expireIn);
+    })
   }
 
   getState(): any {
     return this.currentUserSubject.getValue(); // Return the latest state value
+  }
+
+  async getUserData(token: string) {
+    return this.http.get(`${this.userURL}/data`, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    }).pipe(
+      tap(userData => {
+        this.currentUserSubject.next(userData as any);
+      })
+    );
   }
 
   public async logout() {

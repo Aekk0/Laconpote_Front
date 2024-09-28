@@ -34,7 +34,7 @@
             </div>
         </section>
 
-        <div #paypal style="margin: auto; margin-top: 2vh; max-width: 300px;" id="paypal-button-container"></div>
+        <div *ngIf="user" #paypal style="margin: auto; margin-top: 2vh; max-width: 300px;" id="paypal-button-container"></div>
     </main>
 </div>
 

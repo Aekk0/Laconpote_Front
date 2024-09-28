@@ -1,10 +1,10 @@
 <div class="container">
     <main>
         <div *ngIf="input !== null">
-            <h1>{{ input?.name }}</h1>
+            <h1>{{ input.name }}</h1>
             <p>
-                Ingrédients : {{ input?.ingredients!.join(", ") }} <br>
-                *Allergènes : {{ input?.allergens!.join(", ")}}
+                Ingrédients : {{ input.ingredients.join(", ") }} <br>
+                *Allergènes : {{ input.allergens.join(", ")}}
             </p>
         </div>
 

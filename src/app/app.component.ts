@@ -29,5 +29,14 @@ export class AppComponent implements OnInit {
 
   async initialize(): Promise<void> {
     await this.productService.getAll();
+
+    if (!this.user) {
+      const token = localStorage.getItem("access_token");
+
+      if (token !== "undefined" && token !== null) {
+        const user = await this.authService.getUserData(token);
+        this.authService.setData(user);
+      }
+    }
   }
 }
