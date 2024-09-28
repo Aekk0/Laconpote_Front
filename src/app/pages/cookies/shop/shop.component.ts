@@ -11,7 +11,14 @@ import { BasketService } from '../../../services/basket/basket.service';
 @Component({
   selector: 'app-shop-cookie',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive
+  ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css'
 })

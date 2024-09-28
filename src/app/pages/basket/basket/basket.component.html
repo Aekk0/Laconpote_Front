@@ -1,5 +1,43 @@
 <div class="container">
-  <main>
-    <div id="paypal-button-container"></div>
-  </main>
+<h1>Ma boutique</h1>
+    <main>
+        <section class="products">
+            <div class="cards">
+                <div *ngFor="let product of basket" appearance="outlined" style="width: 20%; min-width: 220px; margin: 15px;">
+                  <mat-card>
+                    <mat-card-header style="margin-top: 1vh">
+                      <mat-card-title>
+                        <a [routerLink]="['/product', product.id]" style="text-decoration: none; color: inherit">
+                          {{ product.name }}
+                        </a>
+                      </mat-card-title>
+                    </mat-card-header>
+
+                    <mat-card-content style="text-align: center; margin: 2vh">
+                    <img
+                    src="data:image/jpeg;base64,{{ product.pictures[0].base64 }}"
+                    style="max-width: 150px; height: 100%"
+                    alt="{{ product.pictures[0].description }}">
+                        <p>
+                        {{ product.description }}
+                        </p>
+                    </mat-card-content>
+                    <mat-card-footer style="text-align: center; margin-bottom: 1vh; font-style: italic;">
+                        <b>{{ product.price }} €</b>
+                        <section style="margin: 1vh; display: flex; flex-direction: row; justify-content: space-around;">
+                          <button (click)="decreaseProductQuantity(product)" mat-flat-button style="background-color: #E8AABE">-</button>
+                            {{ product.quantity }}
+                          <button (click)="increaseProductQuantity(product)" mat-flat-button style="background-color: #E8AABE">+</button>
+                        </section>
+                    </mat-card-footer>
+                </mat-card>
+              </div>
+            </div>
+        </section>
+
+        <div #paypal style="margin: auto; max-width: 300px;" id="paypal-button-container"></div>
+    </main>
 </div>
+
+
+

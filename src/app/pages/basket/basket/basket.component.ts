@@ -1,33 +1,176 @@
-import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/core';
-import { loadScript } from '@paypal/paypal-js';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { loadScript, PayPalNamespace } from '@paypal/paypal-js';
 import { BasketService } from '../../../services/basket/basket.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-basket',
   standalone: true,
-  imports: [],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive
+  ],
   templateUrl: './basket.component.html',
   styleUrl: './basket.component.css'
 })
-export class BasketComponent implements OnInit {
+export class BasketComponent implements OnInit, AfterViewInit {
+  @ViewChild("paypal") div: ElementRef | any;
+
   paypal: any;
-  basket: any;
+  basket: any[] = [];
+  totalPrice: number = 0;
+  index = 0;
 
   constructor(
     private basketService: BasketService
   ) {
     this.basketService.getCurrentBasket().subscribe((basket) => this.basket = basket);
+
+    if (this.basket !== null) {
+      for (const product of this.basket) {
+        this.totalPrice = this.totalPrice + (product.quantity * product.price)
+      }
+    }
+
+    console.log("PRICE", this.totalPrice);
   }
 
   ngOnInit() {
     this.init();
   }
 
+  ngAfterViewInit(): void {
+    console.log(this.div.nativeElement.children);
+  }
+
   async init() {
     this.paypal = await loadScript({
+      currency: "EUR",
       clientId: "AZH51tMmdx9bTphwRFBT7T9T-fbrUkcKSGdRKqbaekKDjO5QOXL7idPYFA1OwLW1d0f4OIZ7ay-nXuxq"
     })
 
-    await this.paypal.Buttons().render("#paypal-button-container");
+    if (this.totalPrice > 0) {
+      await (this.paypal as PayPalNamespace).Buttons!({
+        createOrder: (data, actions) => {
+          return actions.order.create({
+            intent: "CAPTURE",
+            purchase_units: [
+              {
+                amount: {
+                  currency_code: "EUR",
+                  value: String(this.totalPrice)
+                }
+              }
+            ]
+          })
+        },
+        onApprove: (data, actions) => {
+          return actions.order!.capture().then((details) => {
+            console.log("Transaction completed:", details);
+
+            alert("Transaction Completed");
+          });
+        },
+        onError: (error) => {
+          console.error("PAYPAL error:", error);
+
+          alert("Transaction Failed");
+        }
+      }).render("#paypal-button-container");
+    }
+  }
+
+  async decreaseProductQuantity(product: any) {
+    let exist = false;
+
+    let index = 0;
+    for (const basketProduct of this.basket) {
+      if (basketProduct && (product["id"] === basketProduct["id"])) {
+        exist = true;
+
+        if (this.basket[index].quantity === 1) {
+          this.basket.splice(index, 1);
+        }
+        else {
+          this.basket[index] = { ...product, quantity: product.quantity - 1 };
+        }
+      }
+
+      index++;
+    }
+
+    if (!exist) {
+      this.basket.push(product);
+    }
+
+    await this.updatePricing();
+  }
+
+  async increaseProductQuantity(product: any) {
+    let exist = false;
+
+    let index = 0;
+    for (const basketProduct of this.basket) {
+      if (product["id"] === basketProduct["id"]) {
+        exist = true;
+
+        this.basket[index] = { ...product, quantity: product.quantity + 1 };
+      }
+
+      index++;
+    }
+
+    if (!exist) {
+      this.basket.push({ ...product, quantity: 1 });
+    }
+
+    await this.updatePricing();
+  }
+
+  async updatePricing() {
+    this.totalPrice = 0;
+    if (this.basket !== null) {
+      for (const product of this.basket) {
+        this.totalPrice = this.totalPrice + (product.quantity * product.price)
+      }
+    }
+
+    this.div.nativeElement.children[this.index].style = "display: none;";
+    this.index++;
+
+    await (this.paypal as PayPalNamespace).Buttons!({
+      createOrder: (data, actions) => {
+        return actions.order.create({
+          intent: "CAPTURE",
+          purchase_units: [
+            {
+              amount: {
+                currency_code: "EUR",
+                value: String(this.totalPrice)
+              }
+            }
+          ]
+        })
+      },
+      onApprove: (data, actions) => {
+        return actions.order!.capture().then((details) => {
+          console.log("Transaction completed:", details);
+
+          alert("Transaction Completed");
+        });
+      },
+      onError: (error) => {
+        console.error("PAYPAL error:", error);
+
+        alert("Transaction Failed");
+      }
+    }).render("#paypal-button-container");
   }
 }
