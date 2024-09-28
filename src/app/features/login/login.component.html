@@ -12,6 +12,7 @@
 
     <button type="submit">Se connecter</button>
     <button (click)="changeState()">S'enregistrer</button>
+    <button (click)="closeDiag()">Fermer</button>
 </form>
 
 <form *ngIf="login === false" #emailform="ngForm"(ngSubmit)="onSubmitRegistration(emailform)">
@@ -42,4 +43,5 @@
 
     <button type="submit" [disabled]="password !== confirmPassword">S'enregistrer</button>
     <button (click)="changeState()">Déjà un compte ? Se connecter</button>
+    <button (click)="closeDiag()">Fermer</button>
 </form>

@@ -7,6 +7,11 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../services/auth.service';
+import { OrderService } from '../../../services/order/order.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-basket',
@@ -14,6 +19,10 @@ import { AuthService } from '../../../services/auth.service';
   imports: [
     MatCardModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    FormsModule,
     CommonModule,
     RouterOutlet,
     RouterLink,
@@ -31,16 +40,23 @@ export class BasketComponent implements OnInit {
   index = 0;
   paypalClientId = environment.paypalClientID;
   user:any;
+  order: any = {};
+  addressSelected: any | null = null;
 
   constructor(
     private basketService: BasketService,
-    private authService: AuthService
+    private authService: AuthService,
+    private orderService: OrderService
   ) {
     this.authService.user$.subscribe((user: any) => this.user = user);
     this.basketService.getCurrentBasket().subscribe((basket) => this.basket = basket);
 
     if (this.basket !== null) {
+      this.order.address_id = this.addressSelected === null ? null : this.addressSelected.id;
+      this.order.products = this.basket;
+
       for (const product of this.basket) {
+        this.order.totalPrice = this.totalPrice;
         this.totalPrice = this.totalPrice + (product.quantity * product.price)
       }
     }
@@ -50,6 +66,14 @@ export class BasketComponent implements OnInit {
     this.init();
   }
 
+  async onAddressChange(any: any) {
+    return this.updatePricing();
+  }
+
+  trackByFn(index: number, address: any) {
+    return address.id;
+  }
+
   async init() {
     this.paypal = await loadScript({
       currency: "EUR",
@@ -57,7 +81,7 @@ export class BasketComponent implements OnInit {
       environment: "production"
     })
 
-    if (this.totalPrice > 0 && this.user) {
+    if (this.totalPrice > 0 && (this.user && this.user.addresses.length > 0) && this.addressSelected !== null) {
       await (this.paypal as PayPalNamespace).Buttons!({
         createOrder: (data, actions) => {
           return actions.order.create({
@@ -74,6 +98,20 @@ export class BasketComponent implements OnInit {
         },
         onApprove: (data, actions) => {
           return actions.order!.capture().then((details) => {
+            this.orderService.createOrder({
+              ...this.order,
+              products: {
+                ...this.order.products.map((product: any) => {
+                  return {
+                    id: product.id,
+                    name: product.name,
+                    description: product.description,
+                    price: product.price
+                  }
+                })
+              }
+            });
+
             this.basketService.setBasket(null);
 
             alert("Transaction Completed");
@@ -134,16 +172,23 @@ export class BasketComponent implements OnInit {
   }
 
   async updatePricing() {
-    if (this.user) {
+    if (this.totalPrice > 0 && this.user && this.user.addresses.length > 0 && this.addressSelected !== null) {
       this.totalPrice = 0;
       if (this.basket !== null) {
+        this.order.products = this.basket;
+
         for (const product of this.basket) {
           this.totalPrice = this.totalPrice + (product.quantity * product.price)
         }
       }
 
-      this.div.nativeElement.children[this.index].style = "display: none;";
-      this.index++;
+      this.order.totalPrice = this.totalPrice;
+      this.order.address_id = this.addressSelected === null ? null : this.addressSelected.id;
+
+      if (this.div.nativeElement.children.length > 0) {
+        this.div.nativeElement.children[this.index].style = "display: none;";
+        this.index++;
+      }
 
       await (this.paypal as PayPalNamespace).Buttons!({
         createOrder: (data, actions) => {
@@ -161,6 +206,22 @@ export class BasketComponent implements OnInit {
         },
         onApprove: (data, actions) => {
           return actions.order!.capture().then((details) => {
+            this.orderService.createOrder({
+              ...this.order,
+              products: {
+                ...this.order.products.map((product: any) => {
+                  return {
+                    id: product.id,
+                    name: product.name,
+                    description: product.description,
+                    price: product.price
+                  }
+                })
+              }
+            });
+
+            this.basketService.setBasket(null);
+
             console.log("Transaction completed:", details);
 
             alert("Transaction Completed");

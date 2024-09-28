@@ -43,24 +43,27 @@ export class LoginComponent {
   }
 
   async onSubmitRegistration(form: NgForm): Promise<void> {
-    await this.authService.register(form.value);
     if (form.valid && this.password === this.confirmPassword && this.firstName && this.lastName) {
+      await this.authService.register(form.value);
       this.dialogRef.close();
     } else {
       this.error = "Missing email or password";
     }
   }
 
+  closeDiag() {
+    this.dialogRef.close();
+  }
+
   async onSubmitLogin(form: NgForm): Promise<void> {
     if (form.valid && this.password) {
-      this.dialogRef.close();
+        const user = await this.authService.authenticate(form.value)
+        this.authService.setData(user);
+        this.dialogRef.close();
     }
     else {
       this.error = "Missing email or password";
     }
-
-    const user = await this.authService.authenticate(form.value);
-    this.authService.setData(user);
   }
 
   onNoClick(): void {

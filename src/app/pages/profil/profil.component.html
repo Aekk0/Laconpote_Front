@@ -1,7 +1,97 @@
 <div class="container">
-    <div let user of users appearance="outlined" style="width: 20%; min-width: 220px; margin: 15px;">
-        <p>profil works!</p><a [routerLink]="['/user', user.name]"></a>
+  <main>
+    <p>
+      Ajouter une addresse
+    </p>
 
-        {{ user.name }}
-    </div>
+    <form
+    #addressForm="ngForm"
+    (ngSubmit)="onSubmitAddress(addressForm)"
+    >
+      <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around;">
+          <mat-form-field>
+            <mat-label>Numéro de rue</mat-label>
+            <input
+            type="number"
+              matInput
+              placeholder="1"
+              [formControl]="number"
+              (blur)="updateErrorMessage()"
+              required
+            />
+            @if (number.invalid) {
+              <mat-error>{{errorMessage()}}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Nom de rue</mat-label>
+            <input
+            type="string"
+            matInput
+            placeholder="rue des infortunés"
+            [formControl]="street"
+            (blur)="updateErrorMessage()"
+            required
+            />
+            @if (street.invalid) {
+              <mat-error>{{errorMessage()}}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+
+            <mat-label>Ville</mat-label>
+            <input
+            type="string"
+            matInput
+            placeholder="Paris"
+            [formControl]="city"
+            (blur)="updateErrorMessage()"
+            required
+            />
+            @if (city.invalid) {
+              <mat-error>{{errorMessage()}}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+
+            <mat-label>ZIPCode</mat-label>
+            <input
+              type="string"
+              matInput
+              placeholder="75000"
+              [formControl]="ZIPCode"
+              (blur)="updateErrorMessage()"
+              required
+            />
+            @if (ZIPCode.invalid) {
+              <mat-error>{{errorMessage()}}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Phone</mat-label>
+            <input
+            type="string"
+              matInput
+              placeholder="06.xx.xx.xx.xx"
+              [formControl]="phone"
+              (blur)="updateErrorMessage()"
+              required
+            />
+            @if (phone.invalid) {
+              <mat-error>{{errorMessage()}}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div style="width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
+          <button type="submit" mat-flat-button style="background-color: #E8AABE; padding: 1rem; margin: auto">Enregistrer</button>
+          <p>
+            {{ message }}
+          </p>
+        </div>
+      </form>
+  </main>
 </div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 export interface AuthenticateOptions {
   email: string;
@@ -27,6 +27,7 @@ export interface RegisterOptions {
 export class AuthService {
   private authURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/auth";
   private userURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/user";
+  private addressURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/address";
   currentUserSubject = new BehaviorSubject(null);
 
   public user$ = this.currentUserSubject.asObservable();
@@ -37,22 +38,23 @@ export class AuthService {
   public async authenticate(options: AuthenticateOptions) {
     const { email, password } = options;
 
-    return this.http.post(this.authURL, { email, password, includeUserData: true }).pipe(
-      tap(authData => {
-        this.currentUserSubject.next(authData as any);
-        localStorage.setItem("access_token", (authData as any).accessToken);
-        localStorage.setItem("refresh_token", (authData as any).refreshToken);
-        localStorage.setItem("expire_in", (authData as any).expireIn);
-      })
-    );
+    return this.http.post(this.authURL, { email, password, includeUserData: true });
   }
 
   setData(authData$: any) {
     authData$.subscribe((authData: any) => {
-      this.currentUserSubject.next(authData);
-      localStorage.setItem("access_token", (authData as any).accessToken);
-      localStorage.setItem("refresh_token", (authData as any).refreshToken);
-      localStorage.setItem("expire_in", (authData as any).expireIn);
+      this.currentUserSubject.next({
+        ...authData,
+        accessToken: localStorage.getItem("access_token"),
+        refreshToken: localStorage.getItem("refresh_token"),
+        expireIn: localStorage.getItem("expire_in")
+      });
+
+      if (authData["accessToken"]) {
+        localStorage.setItem("access_token", (authData as any).accessToken);
+        localStorage.setItem("refresh_token", (authData as any).refreshToken);
+        localStorage.setItem("expire_in", (authData as any).expireIn);
+      }
     })
   }
 
@@ -83,6 +85,16 @@ export class AuthService {
     return this.http.post(this.authURL, options);
   }
 
+  public addAddress(options: any, token: string) {
+    console.log("hreher", options, token);
+    return this.http.post(this.addressURL, options,
+    {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    });
+  }
+
   public async update(options: UpdateOptions) {
     const { token, email, password } = options;
 
@@ -91,8 +103,10 @@ export class AuthService {
     return this.http.patch(this.userURL, {
       op: "replace",
       path: `/${isEmail ? "email" : "password"}`,
-      value: isEmail ? email : password,
-      Headers: {
+      value: isEmail ? email : password
+    },
+    {
+      headers: {
         authorization: `Bearer ${token}`
       }
     });

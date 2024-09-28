@@ -34,7 +34,20 @@
             </div>
         </section>
 
-        <div *ngIf="user" #paypal style="margin: auto; margin-top: 2vh; max-width: 300px;" id="paypal-button-container"></div>
+        <div *ngIf="user">
+          <div *ngIf="user.addresses && user.addresses.length > 0">
+            <mat-form-field>
+              <mat-label>Addresse selection</mat-label>
+              <mat-select [(value)]="addressSelected" (selectionChange)="onAddressChange($event.value)">
+                <mat-option *ngFor="let address of user.addresses; trackBy: trackByFn" [value]="address">
+                  {{address.number}} {{address.street}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="user" #paypal style="margin: auto; margin-top: 2vh; max-width: 300px;" id="paypal-button-container"></div>
+          <div *ngIf="user.addresses && user.addresses.length === 0">Vous devez fournir au moins une addresse à votre profil.</div>
+        </div>
     </main>
 </div>
 
