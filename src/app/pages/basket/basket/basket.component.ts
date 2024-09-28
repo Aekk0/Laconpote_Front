@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { loadScript, PayPalNamespace } from '@paypal/paypal-js';
 import { BasketService } from '../../../services/basket/basket.service';
 import { MatCardModule } from '@angular/material/card';
@@ -20,7 +20,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   templateUrl: './basket.component.html',
   styleUrl: './basket.component.css'
 })
-export class BasketComponent implements OnInit, AfterViewInit {
+export class BasketComponent implements OnInit {
   @ViewChild("paypal") div: ElementRef | any;
 
   paypal: any;
@@ -38,16 +38,10 @@ export class BasketComponent implements OnInit, AfterViewInit {
         this.totalPrice = this.totalPrice + (product.quantity * product.price)
       }
     }
-
-    console.log("PRICE", this.totalPrice);
   }
 
   ngOnInit() {
     this.init();
-  }
-
-  ngAfterViewInit(): void {
-    console.log(this.div.nativeElement.children);
   }
 
   async init() {

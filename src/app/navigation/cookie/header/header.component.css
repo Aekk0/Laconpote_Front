@@ -39,7 +39,8 @@ nav a:hover{
 }
 
 .header {
-    height: calc(100vh - 12vh - 84vh);
+    /* height: calc(100vh - 12vh - 84vh); */
+    min-height: 5vh;
 }
 
 nav button {

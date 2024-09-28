@@ -82,8 +82,6 @@ export class CookiesShopComponent implements OnInit {
 
       return ite;
     });
-
-    console.log("DECREASE", this.stateLessBasket);
   }
 
   increaseProductQuantity(product: any) {
@@ -113,14 +111,24 @@ export class CookiesShopComponent implements OnInit {
     });
   }
 
-  async updateBasket() {
-    await this.basketService.update(this.stateLessBasket);
+  async updateBasket(product: any) {
+    await this.basketService.update([product]);
 
-    this.stateLessBasket = [];
-    this.products = this.products.map((product: any) => {
+    // this.stateLessBasket = [];
+    let index = 0;
+    for (const stateLessProduct of this.stateLessBasket) {
+      if (stateLessProduct.id === product.id) {
+        this.stateLessBasket.splice(index, 1);
+
+        break;
+      }
+
+      index++;
+    }
+    this.products = this.products.map((ite: any) => {
       return {
-        ...product,
-        quantity: 0
+        ...ite,
+        quantity: ite.id === product.id ? 0 : ite.quantity
       }
     });
   }

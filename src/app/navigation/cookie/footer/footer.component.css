@@ -1,9 +1,13 @@
+* {
+  font-size: 0.8rem;
+}
+
 .footer {
-    height: calc(100vh - 84vh - 4vh);
+    /* height: calc(100vh - 84vh - 4vh); */
+    min-height: 5vh;
     background: #e8aabe;
     margin-top: 0px;
     display: flex;
-    
 }
 
 .footer-section {
