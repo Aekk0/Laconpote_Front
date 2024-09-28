@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-basket',
@@ -47,7 +48,8 @@ export class BasketComponent implements OnInit {
   async init() {
     this.paypal = await loadScript({
       currency: "EUR",
-      clientId: "AZH51tMmdx9bTphwRFBT7T9T-fbrUkcKSGdRKqbaekKDjO5QOXL7idPYFA1OwLW1d0f4OIZ7ay-nXuxq"
+      clientId: environment.paypalClientID,
+      environment: "production"
     })
 
     if (this.totalPrice > 0) {
