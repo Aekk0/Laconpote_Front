@@ -45,9 +45,9 @@ export class AuthService {
     authData$.subscribe((authData: any) => {
       this.currentUserSubject.next({
         ...authData,
-        accessToken: localStorage.getItem("access_token"),
-        refreshToken: localStorage.getItem("refresh_token"),
-        expireIn: localStorage.getItem("expire_in")
+        accessToken: (authData as any).accessToken ?? localStorage.getItem("access_token"),
+        refreshToken: (authData as any).refreshToken ?? localStorage.getItem("refresh_token"),
+        expireIn: (authData as any).expireIn ?? localStorage.getItem("expire_in")
       });
 
       if (authData["accessToken"]) {
@@ -86,7 +86,6 @@ export class AuthService {
   }
 
   public addAddress(options: any, token: string) {
-    console.log("hreher", options, token);
     return this.http.post(this.addressURL, options,
     {
       headers: {

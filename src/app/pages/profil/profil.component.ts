@@ -42,8 +42,6 @@ export class ProfilComponent {
     merge(this.number.statusChanges, this.number.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateErrorMessage());
-
-    console.log("USER", this.user);
   }
 
   updateErrorMessage() {
