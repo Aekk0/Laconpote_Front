@@ -26,6 +26,7 @@ import { IntensechocoComponent } from './pages/produits/intensechoco/intensechoc
 import { KinderfusionComponent } from './pages/produits/kinderfusion/kinderfusion.component';
 import { TriplechocoComponent } from './pages/produits/triplechoco/triplechoco.component';
 import { BasketComponent } from './pages/basket/basket/basket.component';
+import { ProductsComponent } from './pages/produits/products/products.component';
 
 export const routes: Routes = [
     {
@@ -89,55 +90,59 @@ export const routes: Routes = [
         component: ProfilComponent
     },
     {
-        path: "blancnoisette",
+        path: "produits/blancnoisette",
         component: BlancnoisetteComponent
     },
     {
-        path: "cacahuetegourmande",
+        path: "produits/cacahuetegourmande",
         component: CacahuetegourmandeComponent
     },
     {
-        path: "chocobanane",
+        path: "produits/chocobanane",
         component: ChocobananeComponent
     },
     {
-        path: "chocoblanc",
+        path: "produits/chocoblanc",
         component: ChocoblancComponent
     },
     {
-        path: "chococolor",
+        path: "produits/chococolor",
         component: ChococolorComponent
     },
     {
-        path: "chocolait",
+        path: "produits/chocolait",
         component: ChocolaitComponent
     },
     {
-        path: "choconoir",
+        path: "produits/choconoir",
         component: ChoconoirComponent
     },
     {
-        path: "chocoplaisir",
+        path: "produits/chocoplaisir",
         component: ChocoplaisirComponent
     },
     {
-        path: "croustichoco",
+        path: "produits/croustichoco",
         component: CrousticocoComponent
     },
     {
-        path: "fraisicroq",
+        path: "produits/fraisicroq",
         component: FraisicroqComponent
     },
     {
-        path: "intensechoco",
+        path: "produits/intensechoco",
         component: IntensechocoComponent
     },
     {
-        path: "kinderfusion",
+        path: "produits/kinderfusion",
         component: KinderfusionComponent
     },
     {
-        path: "triplechoco",
+        path: "produits/triplechoco",
         component: TriplechocoComponent
+    },
+    {
+        path: "produits/products",
+        component: ProductsComponent
     }
 ];
