@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-profil',
@@ -9,5 +10,14 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './profil.component.css'
 })
 export class ProfilComponent {
+  user: any;
 
+  constructor(
+    private authService: AuthService
+  ) {
+
+  }
+
+  ngOnInit() {
+  }
 }
