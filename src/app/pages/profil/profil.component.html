@@ -96,10 +96,31 @@
         </form>
     </div>
 
-    <div>
-      <!-- <div *ngFor="let product of order" appearance="outlined" style="width: 20%; min-width: 220px; margin: 15px;">
-
-      </div> -->
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+      <div *ngFor="let order of orders" appearance="outlined" style="width: 20%; min-width: 220px; margin: 15px;">
+              <mat-card>
+                    <mat-card-header style="margin-top: 1vh">
+                      <mat-card-title>
+                        {{ order.user.firstName }} {{ order.user.lastName }}
+                      </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content style="margin: 1vh;">
+                      <ul>
+                        <li *ngFor="let orderProduct of order.orderProducts">
+                          {{ orderProduct.quantity }} - {{ orderProduct.product.name }}
+                        </li>
+                      </ul>
+                    </mat-card-content>
+                    <mat-card-footer style="text-align: center; margin: 1vh;">
+                      addresse: <br/>
+                      numéro: {{ order.address.number }} <br/>
+                      street: {{ order.address.street }} <br/>
+                      city: {{ order.address.city }} <br/>
+                      ZIPCode: {{ order.address.ZIPCode }} <br/>
+                      complement: {{ order.address.complement }}
+                    </mat-card-footer>
+                </mat-card>
+      </div>
     </div>
   </main>
 </div>
