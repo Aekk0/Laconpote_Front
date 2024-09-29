@@ -60,6 +60,8 @@ export class BasketComponent implements OnInit {
         this.totalPrice = this.totalPrice + (product.quantity * product.price)
       }
     }
+
+    console.log("HREHERH", this.user);
   }
 
   ngOnInit() {
@@ -81,7 +83,7 @@ export class BasketComponent implements OnInit {
       environment: "production"
     })
 
-    if (this.totalPrice > 0 && (this.user && (this.user.address && this.user.addresses.length > 0)) && this.addressSelected !== null) {
+    if (this.totalPrice > 0 && (this.user && this.user.accessToken && (this.user.userData.address && this.user.userData.addresses.length > 0)) && this.addressSelected !== null) {
       await (this.paypal as PayPalNamespace).Buttons!({
         createOrder: (data, actions) => {
           return actions.order.create({
@@ -180,7 +182,7 @@ export class BasketComponent implements OnInit {
   }
 
   async updatePricing() {
-    if (this.totalPrice > 0 && this.user && this.user.addresses.length > 0 && this.addressSelected !== null) {
+    if (this.totalPrice > 0 && this.user && this.user.accessToken && this.user.userData.addresses.length > 0 && this.addressSelected !== null) {
       this.totalPrice = 0;
       if (this.basket !== null) {
         this.order.products = this.basket;
