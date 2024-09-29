@@ -206,6 +206,26 @@ export class BasketComponent implements OnInit {
         },
         onApprove: async (data, actions) => {
           try {
+            this.orderService.createOrder({
+              ...this.order,
+              products: this.order.products.map((product: any) => ({
+                id: product.id,
+                name: product.name,
+                description: product.description,
+                price: product.price
+              }))
+            }).subscribe({
+              next(value) {
+                console.log("SUCCESS");
+                // actions.order!.capture().then((details) => {
+                //   console.log("Transaction completed:", details);
+                //   // this.basketService.setBasket(null);
+                // })
+              },
+              error: (error) => {
+                console.log("ERROR");
+              }
+            })
             const details = await actions.order!.capture();
             console.log("Transaction completed:", details);
 

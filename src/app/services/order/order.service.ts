@@ -13,7 +13,7 @@ export class OrderService {
   constructor(private http: HttpClient) {
   }
 
-  public async createOrder(options: any) {
+  public createOrder(options: any) {
     const { token, ...order } = options;
 
     return this.http.post(this.orderURL, {
