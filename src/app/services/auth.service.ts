@@ -82,7 +82,7 @@ export class AuthService {
   }
 
   public async register(options: RegisterOptions) {
-    return this.http.post(this.authURL, options);
+    return this.http.post(this.userURL, options).toPromise();
   }
 
   public addAddress(options: any, token: string) {
