@@ -112,12 +112,10 @@ export class BasketComponent implements OnInit {
             }).subscribe({
               next(value) {
                 console.log("SUCCESS");
-
-                alert("Transaction Completed");
-                // actions.order!.capture().then((details) => {
-                //   console.log("Transaction completed:", details);
-                //   // this.basketService.setBasket(null);
-                // })
+                actions.order!.capture().then((details) => {
+                  console.log("Transaction completed:", details);
+                  alert("Transaction Completed");
+                });
               },
               error: (error) => {
                 console.log("ERROR", error);
@@ -215,7 +213,6 @@ export class BasketComponent implements OnInit {
           })
         },
         onApprove: async (data, actions) => {
-          console.log("FOOOO", this.order, this.user.accessToken);
             this.orderService.createOrder({
               ...this.order,
               token: this.user.accessToken,
@@ -228,12 +225,10 @@ export class BasketComponent implements OnInit {
             }).subscribe({
               next(value) {
                 console.log("SUCCESS");
-
-                alert("Transaction Completed");
-                // actions.order!.capture().then((details) => {
-                //   console.log("Transaction completed:", details);
-                //   // this.basketService.setBasket(null);
-                // })
+                actions.order!.capture().then((details) => {
+                  console.log("Transaction completed:", details);
+                  alert("Transaction Completed");
+                });
               },
               error: (error) => {
                 console.log("ERROR", error);
