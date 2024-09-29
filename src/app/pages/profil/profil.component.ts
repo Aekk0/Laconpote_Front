@@ -7,18 +7,22 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { OrderService } from '../../services/order/order.service';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profil',
   standalone: true,
   imports: [
     MatFormFieldModule,
+    MatCardModule,
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     RouterOutlet,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    CommonModule
   ],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.css'
@@ -34,14 +38,14 @@ export class ProfilComponent implements OnInit {
   message: string = "";
 
   user: any;
-  order: any;
+  orders: any;
 
   constructor(
     private authService: AuthService,
     private orderService: OrderService
   ) {
     this.authService.user$.subscribe((user: any) => this.user = user);
-    this.orderService.order$.subscribe((order: any) => this.order = order);
+    this.orderService.order$.subscribe((order: any) => this.orders = order);
 
     merge(this.number.statusChanges, this.number.valueChanges)
       .pipe(takeUntilDestroyed())
@@ -53,7 +57,7 @@ export class ProfilComponent implements OnInit {
     else {
       this.orderService.getAll(this.user.accessToken)
     }
-    console.log("REHRHEHE", this.user, this.order);
+    console.log("REHRHEHE", this.user, this.orders);
   }
 
   ngOnInit(): void {
