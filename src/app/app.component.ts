@@ -35,7 +35,9 @@ export class AppComponent implements OnInit {
 
       if (token !== "undefined" && token !== null) {
         const user = await this.authService.getUserData(token);
-        this.authService.setData(user);
+        this.authService.setData({ userData:  {
+          ...user
+        }});
       }
     }
   }

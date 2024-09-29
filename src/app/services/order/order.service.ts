@@ -17,7 +17,8 @@ export class OrderService {
     const { token, ...order } = options;
 
     return this.http.post(this.orderURL, {
-      ...order,
+      ...order
+    }, {
       headers: {
         authorization: `Bearer ${token}`
       }
