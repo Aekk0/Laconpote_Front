@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,6 +6,7 @@ import { merge } from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import { OrderService } from '../../services/order/order.service';
 
 @Component({
   selector: 'app-profil',
@@ -22,7 +23,7 @@ import {MatInputModule} from '@angular/material/input';
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.css'
 })
-export class ProfilComponent {
+export class ProfilComponent implements OnInit {
   readonly number = new FormControl('', [Validators.required]);
   readonly street = new FormControl('', [Validators.required]);
   readonly city = new FormControl('', [Validators.required]);
@@ -33,15 +34,43 @@ export class ProfilComponent {
   message: string = "";
 
   user: any;
+  order: any;
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private orderService: OrderService
   ) {
     this.authService.user$.subscribe((user: any) => this.user = user);
+    this.orderService.order$.subscribe((order: any) => this.order = order);
 
     merge(this.number.statusChanges, this.number.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateErrorMessage());
+
+    if (this.user.userData.role === "Admin") {
+      this.orderService.getAllByAdmin(this.user.accessToken)
+    }
+    else {
+      this.orderService.getAll(this.user.accessToken)
+    }
+    console.log("REHRHEHE", this.user, this.order);
+  }
+
+  ngOnInit(): void {
+      this.init();
+  }
+
+  async init() {
+    let order;
+
+    if (this.user.userData.role === "Admin") {
+      order = await this.orderService.getAllByAdmin(this.user.accessToken)
+    }
+    else {
+      order = await this.orderService.getAll(this.user.accessToken)
+    }
+
+    this.orderService.setData(order);
   }
 
   updateErrorMessage() {
