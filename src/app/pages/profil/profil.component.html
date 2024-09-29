@@ -104,7 +104,7 @@
                         {{ order.user.firstName }} {{ order.user.lastName }}
                       </mat-card-title>
                     </mat-card-header>
-                    <mat-card-content>
+                    <mat-card-content style="margin: 1vh;">
                       <ul>
                         <li *ngFor="let orderProduct of order.orderProducts">
                           {{ orderProduct.quantity }} - {{ orderProduct.product.name }}
