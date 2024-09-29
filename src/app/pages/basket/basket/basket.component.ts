@@ -96,26 +96,34 @@ export class BasketComponent implements OnInit {
             ]
           })
         },
-        onApprove: (data, actions) => {
-          return actions.order!.capture().then((details) => {
+        onApprove: async (data, actions) => {
+          console.log("FOOOO", this.order, this.user.accessToken);
             this.orderService.createOrder({
               ...this.order,
-              products: {
-                ...this.order.products.map((product: any) => {
-                  return {
-                    id: product.id,
-                    name: product.name,
-                    description: product.description,
-                    price: product.price
-                  }
-                })
+              token: this.user.accessToken,
+              products: this.order.products.map((product: any) => ({
+                id: product.id,
+                name: product.name,
+                description: product.description,
+                price: product.price
+              }))
+            }).subscribe({
+              next(value) {
+                console.log("SUCCESS");
+
+                alert("Transaction Completed");
+                // actions.order!.capture().then((details) => {
+                //   console.log("Transaction completed:", details);
+                //   // this.basketService.setBasket(null);
+                // })
+              },
+              error: (error) => {
+                console.log("ERROR", error);
+                alert("Transaction Completed, but order creation failed.");
               }
-            });
+            })
 
             this.basketService.setBasket(null);
-
-            alert("Transaction Completed");
-          });
         },
         onError: (error) => {
           alert("Transaction Failed");
@@ -205,9 +213,10 @@ export class BasketComponent implements OnInit {
           })
         },
         onApprove: async (data, actions) => {
-          try {
+          console.log("FOOOO", this.order, this.user.accessToken);
             this.orderService.createOrder({
               ...this.order,
+              token: this.user.accessToken,
               products: this.order.products.map((product: any) => ({
                 id: product.id,
                 name: product.name,
@@ -217,35 +226,20 @@ export class BasketComponent implements OnInit {
             }).subscribe({
               next(value) {
                 console.log("SUCCESS");
+
+                alert("Transaction Completed");
                 // actions.order!.capture().then((details) => {
                 //   console.log("Transaction completed:", details);
                 //   // this.basketService.setBasket(null);
                 // })
               },
               error: (error) => {
-                console.log("ERROR");
+                console.log("ERROR", error);
+                alert("Transaction Completed, but order creation failed.");
               }
             })
-            const details = await actions.order!.capture();
-            console.log("Transaction completed:", details);
-
-            await this.orderService.createOrder({
-              ...this.order,
-              products: this.order.products.map((product: any) => ({
-                id: product.id,
-                name: product.name,
-                description: product.description,
-                price: product.price
-              }))
-            });
 
             this.basketService.setBasket(null);
-
-            alert("Transaction Completed");
-          } catch (error) {
-            console.error("Order creation failed:", error);
-            alert("Transaction Completed, but order creation failed.");
-          }
         },
         onError: (error) => {
           console.error("PAYPAL error:", error);
