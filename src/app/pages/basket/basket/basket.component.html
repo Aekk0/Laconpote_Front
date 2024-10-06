@@ -1,55 +1,67 @@
 <div class="container">
-    <main>
-        <section class="products">
-            <div class="cards">
-                <div *ngFor="let product of basket" appearance="outlined" style="width: 20%; min-width: 220px; margin: 15px;">
-                  <mat-card>
-                    <mat-card-header style="margin-top: 1vh">
-                      <mat-card-title>
-                        <a [routerLink]="['/product', product.id]" style="text-decoration: none; color: inherit">
-                          {{ product.name }}
-                        </a>
-                      </mat-card-title>
-                    </mat-card-header>
-
-                    <mat-card-content style="text-align: center; margin: 2vh">
-                    <img
-                    src="data:image/jpeg;base64,{{ product.pictures[0].base64 }}"
-                    style="max-width: 150px; height: 100%"
-                    alt="{{ product.pictures[0].description }}">
-                        <p>
-                        {{ product.description }}
-                        </p>
-                    </mat-card-content>
-                    <mat-card-footer style="text-align: center; margin-bottom: 1vh; font-style: italic;">
-                        <b>{{ product.price }} €</b>
-                        <section style="margin: 1vh; display: flex; flex-direction: row; justify-content: space-around;">
-                          <button (click)="decreaseProductQuantity(product)" mat-flat-button style="background-color: #E8AABE">-</button>
-                            {{ product.quantity }}
-                          <button (click)="increaseProductQuantity(product)" mat-flat-button style="background-color: #E8AABE">+</button>
-                        </section>
-                    </mat-card-footer>
-                </mat-card>
-              </div>
+  <main>
+    <section class="basket">
+      <h2>Your Basket</h2>
+      <div *ngIf="basket.length === 0">
+        Your basket is empty.
+      </div>
+      <div *ngFor="let product of basket" class="basket-item">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{ product.name }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Price: {{ product.price }} €</p>
+            <div class="quantity-control">
+              <button mat-button (click)="decreaseProductQuantity(product)">-</button>
+              <span>{{ product.quantity }}</span>
+              <button mat-button (click)="increaseProductQuantity(product)">+</button>
             </div>
-        </section>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button (click)="removeProduct(product)">Remove</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="total-price">
+        <h3>Total: {{ totalPrice }} €</h3>
+      </div>
+    </section>
 
-        <div *ngIf="user">
-          <div *ngIf="user.userData.addresses && user.userData.addresses.length > 0">
-            <mat-form-field>
-              <mat-label>Addresse selection</mat-label>
-              <mat-select [(value)]="addressSelected" (selectionChange)="onAddressChange($event.value)">
-                <mat-option *ngFor="let address of user.userData.addresses; trackBy: trackByFn" [value]="address">
-                  {{address.number}} {{address.street}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div *ngIf="user" #paypal style="margin: auto; margin-top: 2vh; max-width: 300px;" id="paypal-button-container"></div>
-          <div *ngIf="user.userData.addresses && user.userData.addresses.length === 0">Vous devez fournir au moins une addresse à votre profil.</div>
-        </div>
-    </main>
+    <section class="order-details" *ngIf="user">
+      <h2>Order Details</h2>
+      <mat-form-field *ngIf="user.userData.addresses && user.userData.addresses.length > 0">
+        <mat-label>Select Address</mat-label>
+        <mat-select [(value)]="addressSelected" (selectionChange)="onAddressChange($event.value)">
+          <mat-option *ngFor="let address of user.userData.addresses; trackBy: trackAddressByFn" [value]="address">
+            {{address.number}} {{address.street}}, {{address.city}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="providers && providers.length > 0">
+        <mat-label>Select Provider</mat-label>
+        <mat-select [(value)]="providerSelected" (selectionChange)="onProviderChange($event.value)">
+          <mat-option *ngFor="let provider of providers; trackBy: trackProviderByFn" [value]="provider">
+            {{provider.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div *ngIf="user.userData.addresses && user.userData.addresses.length === 0">
+        Please add an address to your profile before placing an order.
+      </div>
+      <div *ngIf="!providers || providers.length === 0">
+        No providers available at the moment.
+      </div>
+    </section>
+
+    <section class="confirm-order">
+      <button mat-raised-button color="primary" (click)="confirmOrder()" [disabled]="basket.length === 0 || !addressSelected || !providerSelected">
+        Confirm Order
+      </button>
+    </section>
+
+    <section class="paypal-button" *ngIf="showPaypalButton">
+      <div #paypal id="paypal-button-container"></div>
+    </section>
+  </main>
 </div>
-
-
-

@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { ProviderService } from '../../../services/prodiver/provider.service';
 
 @Component({
   selector: 'app-basket',
@@ -39,41 +40,29 @@ export class BasketComponent implements OnInit {
   totalPrice: number = 0;
   index = 0;
   paypalClientId = environment.paypalClientID;
-  user:any;
+  user: any;
   order: any = {};
+  providers: any[] = [];
   addressSelected: any | null = null;
+  providerSelected: any | null = null;
+  showPaypalButton: boolean = false;
 
   constructor(
     private basketService: BasketService,
     private authService: AuthService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private providerService: ProviderService
   ) {
     this.authService.user$.subscribe((user: any) => this.user = user);
-    this.basketService.getCurrentBasket().subscribe((basket) => this.basket = basket);
-
-    if (this.basket !== null) {
-      this.order.address_id = this.addressSelected === null ? null : this.addressSelected.id;
-      this.order.products = this.basket;
-
-      for (const product of this.basket) {
-        this.order.totalPrice = this.totalPrice;
-        this.totalPrice = this.totalPrice + (product.quantity * product.price)
-      }
-    }
-
-    console.log("HREHERH", this.user);
+    this.basketService.getCurrentBasket().subscribe((basket) => {
+      this.basket = basket;
+      this.calculateTotalPrice();
+    });
   }
 
   ngOnInit() {
     this.init();
-  }
-
-  async onAddressChange(any: any) {
-    return this.updatePricing();
-  }
-
-  trackByFn(index: number, address: any) {
-    return address.id;
+    this.fetchProviders();
   }
 
   async init() {
@@ -81,118 +70,141 @@ export class BasketComponent implements OnInit {
       currency: "EUR",
       clientId: this.paypalClientId,
       environment: "production"
-    })
+    });
+  }
 
-    if (this.totalPrice > 0 && (this.user && this.user.accessToken && (this.user.userData.address && this.user.userData.addresses.length > 0)) && this.addressSelected !== null) {
-      await (this.paypal as PayPalNamespace).Buttons!({
-        createOrder: (data, actions) => {
-          return actions.order.create({
-            intent: "CAPTURE",
-            purchase_units: [
-              {
-                amount: {
-                  currency_code: "EUR",
-                  value: String(this.totalPrice)
-                }
-              }
-            ]
-          })
-        },
-        onApprove: async (data, actions) => {
-          console.log("FOOOO", this.order, this.user.accessToken);
-            this.orderService.createOrder({
-              ...this.order,
-              token: this.user.accessToken,
-              products: this.order.products.map((product: any) => ({
-                id: product.id,
-                name: product.name,
-                description: product.description,
-                price: product.price
-              }))
-            }).subscribe({
-              next(value) {
-                console.log("SUCCESS");
-                actions.order!.capture().then((details) => {
-                  console.log("Transaction completed:", details);
-                  alert("Transaction Completed");
-                });
-              },
-              error: (error) => {
-                console.log("ERROR", error);
-                alert("Transaction Completed, but order creation failed.");
-              }
-            })
-
-            this.basketService.setBasket(null);
-        },
-        onError: (error) => {
-          alert("Transaction Failed");
-        }
-      }).render("#paypal-button-container");
+  async fetchProviders() {
+    if (this.user && this.user.accessToken) {
+      try {
+        const observable = await this.providerService.getAll(this.user.accessToken);
+        observable.subscribe({
+          next: (providers: any) => {
+            this.providers = providers;
+          },
+          error: (error) => {
+            console.error('Error fetching providers:', error);
+          }
+        });
+      } catch (error) {
+        console.error('Error getting providers observable:', error);
+      }
     }
   }
 
-  async decreaseProductQuantity(product: any) {
-    let exist = false;
-
-    let index = 0;
-    for (const basketProduct of this.basket) {
-      if (basketProduct && (product["id"] === basketProduct["id"])) {
-        exist = true;
-
-        if (this.basket[index].quantity === 1) {
-          this.basket.splice(index, 1);
-        }
-        else {
-          this.basket[index] = { ...product, quantity: product.quantity - 1 };
-        }
-      }
-
-      index++;
+  calculateTotalPrice() {
+    this.totalPrice = 0;
+    for (const product of this.basket) {
+      this.totalPrice += product.quantity * product.price;
     }
-
-    if (!exist) {
-      this.basket.push(product);
-    }
-
-    await this.updatePricing();
   }
 
-  async increaseProductQuantity(product: any) {
-    let exist = false;
+  trackAddressByFn(index: number, address: any) {
+    return address.id;
+  }
 
-    let index = 0;
-    for (const basketProduct of this.basket) {
-      if (product["id"] === basketProduct["id"]) {
-        exist = true;
-
-        this.basket[index] = { ...product, quantity: product.quantity + 1 };
-      }
-
-      index++;
-    }
-
-    if (!exist) {
-      this.basket.push({ ...product, quantity: 1 });
-    }
-
-    await this.updatePricing();
+  trackProviderByFn(index: number, provider: any) {
+    return provider.id;
   }
 
   async updatePricing() {
     if (this.totalPrice > 0 && this.user && this.user.accessToken && this.user.userData.addresses.length > 0 && this.addressSelected !== null) {
       this.totalPrice = 0;
+      let totalItems = 0;
+
       if (this.basket !== null) {
         this.order.products = this.basket;
 
         for (const product of this.basket) {
-          this.totalPrice = this.totalPrice + (product.quantity * product.price)
+          this.totalPrice += product.quantity * product.price;
+          totalItems += product.quantity;
         }
+      }
+
+      // Add provider price if a provider is selected
+      if (this.providerSelected) {
+        let shippingPrice = 0;
+
+        if (this.providerSelected.name === "Colissimo") {
+              if (totalItems <= 10) shippingPrice = 8.80;
+              else shippingPrice = 10.15;
+        }
+        else {
+          if (totalItems <= 10) shippingPrice = 5.40;
+          else if (totalItems > 10 && totalItems < 16) shippingPrice = 10.15;
+          else shippingPrice = 0;
+        }
+
+        this.totalPrice += shippingPrice;
       }
 
       this.order.totalPrice = this.totalPrice;
       this.order.address_id = this.addressSelected === null ? null : this.addressSelected.id;
+      this.order.provider_id = this.providerSelected === null ? null : this.providerSelected.id;
 
+      if (this.div) {
+        if (this.div.nativeElement.children && this.div.nativeElement.children.length > 0) {
+          this.div.nativeElement.children[this.index].style = "display: none;";
+          this.index++;
+        }
+      }
+
+      await this.renderPaypalButton();
+    }
+  }
+
+  async decreaseProductQuantity(product: any) {
+    if (product.quantity > 1) {
+      product.quantity--;
+    } else {
+      this.basket = this.basket.filter(item => item.id !== product.id);
+    }
+    this.recalculateTotalPrice();
+    await this.updateBasket();
+  }
+
+  async increaseProductQuantity(product: any) {
+    product.quantity++;
+    this.recalculateTotalPrice();
+    await this.updateBasket();
+  }
+
+  async removeProduct(product: any) {
+    this.basket = this.basket.filter(item => item.id !== product.id);
+    this.recalculateTotalPrice();
+    await this.updateBasket();
+  }
+
+  async updateBasket() {
+    await this.basketService.setBasket(this.basket);
+    this.recalculateTotalPrice();
+    await this.updatePricing();
+  }
+
+  recalculateTotalPrice() {
+    this.totalPrice = this.basket.reduce((total, product) => total + (product.price * product.quantity), 0);
+  }
+
+  async onAddressChange(address: any) {
+    this.addressSelected = address;
+    await this.updatePricing();
+  }
+
+  async onProviderChange(provider: any) {
+    this.providerSelected = provider;
+    await this.updatePricing();
+  }
+
+  async confirmOrder() {
+    if (this.totalPrice > 0 && this.user && this.user.accessToken && this.user.userData.addresses.length > 0 && this.addressSelected !== null) {
+      this.showPaypalButton = true;
+      await this.renderPaypalButton();
+    } else {
+      alert("Please make sure you have items in your basket, are logged in, and have selected an address.");
+    }
+  }
+
+  async renderPaypalButton() {
+    if (this.div) {
       if (this.div.nativeElement.children && this.div.nativeElement.children.length > 0) {
         this.div.nativeElement.children[this.index].style = "display: none;";
         this.index++;
@@ -210,37 +222,33 @@ export class BasketComponent implements OnInit {
                 }
               }
             ]
-          })
+          });
         },
         onApprove: async (data, actions) => {
-            this.orderService.createOrder({
-              ...this.order,
-              token: this.user.accessToken,
-              products: this.order.products.map((product: any) => ({
-                id: product.id,
-                name: product.name,
-                description: product.description,
-                price: product.price
-              }))
-            }).subscribe({
-              next(value) {
-                console.log("SUCCESS");
-                actions.order!.capture().then((details) => {
-                  console.log("Transaction completed:", details);
-                  alert("Transaction Completed");
-                });
-              },
-              error: (error) => {
-                console.log("ERROR", error);
-                alert("Transaction Completed, but order creation failed.");
-              }
-            })
+          this.orderService.createOrder({
+            ...this.order,
+            token: this.user.accessToken,
+            products: this.basket.map((product: any) => ({
+              id: product.id,
+              name: product.name,
+              description: product.description,
+              price: product.price,
+              quantity: product.quantity
+            }))
+          }).subscribe({
+            next(value) {
+              actions.order!.capture().then((details) => {
+                alert("Transaction Completed");
+              });
+            },
+            error: (error) => {
+              alert("Transaction Completed, but order creation failed.");
+            }
+          });
 
-            this.basketService.setBasket(null);
+          this.basketService.setBasket([]);
         },
         onError: (error) => {
-          console.error("PAYPAL error:", error);
-
           alert("Transaction Failed");
         }
       }).render("#paypal-button-container");

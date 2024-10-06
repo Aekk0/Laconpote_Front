@@ -143,5 +143,6 @@ export class BasketService {
 
   setBasket(basket: any): void {
     this.currentBasketSubject.next(basket);
+    localStorage.setItem('basket', JSON.stringify(basket));
   }
 }

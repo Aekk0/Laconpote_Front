@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -57,9 +58,10 @@ export class LoginComponent {
 
   async onSubmitLogin(form: NgForm): Promise<void> {
     if (form.valid && this.password) {
-        const user = await this.authService.authenticate(form.value)
-        this.authService.setData(user);
-        this.dialogRef.close();
+      const userObservable = await this.authService.authenticate(form.value);
+      const userData = await firstValueFrom(userObservable);
+      this.authService.setData(userData);
+      this.dialogRef.close();
     }
     else {
       this.error = "Missing email or password";
