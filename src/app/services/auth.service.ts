@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 
@@ -41,21 +41,19 @@ export class AuthService {
     return this.http.post(this.authURL, { email, password, includeUserData: true });
   }
 
-  setData(authData$: any) {
-    authData$.subscribe((authData: any) => {
-      this.currentUserSubject.next({
-        ...authData,
-        accessToken: (authData as any).accessToken ?? localStorage.getItem("access_token"),
-        refreshToken: (authData as any).refreshToken ?? localStorage.getItem("refresh_token"),
-        expireIn: (authData as any).expireIn ?? localStorage.getItem("expire_in")
-      });
+  setData(authData: any) {
+    this.currentUserSubject.next({
+      ...authData,
+      accessToken: authData.accessToken ?? localStorage.getItem("access_token"),
+      refreshToken: authData.refreshToken ?? localStorage.getItem("refresh_token"),
+      expireIn: authData.expireIn ?? localStorage.getItem("expire_in")
+    });
 
-      if (authData["accessToken"]) {
-        localStorage.setItem("access_token", (authData as any).accessToken);
-        localStorage.setItem("refresh_token", (authData as any).refreshToken);
-        localStorage.setItem("expire_in", (authData as any).expireIn);
-      }
-    })
+    if (authData["accessToken"]) {
+      localStorage.setItem("access_token", authData.accessToken);
+      localStorage.setItem("refresh_token", authData.refreshToken);
+      localStorage.setItem("expire_in", authData.expireIn);
+    }
   }
 
   getState(): any {
@@ -82,7 +80,7 @@ export class AuthService {
   }
 
   public async register(options: RegisterOptions) {
-    return this.http.post(this.userURL, options).toPromise();
+    return firstValueFrom(this.http.post(this.userURL, options));
   }
 
   public addAddress(options: any, token: string) {

@@ -57,7 +57,6 @@ export class ProfilComponent implements OnInit {
     else {
       this.orderService.getAll(this.user.accessToken)
     }
-    console.log("REHRHEHE", this.user, this.orders);
   }
 
   ngOnInit(): void {

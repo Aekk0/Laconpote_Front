@@ -4,6 +4,7 @@ import { HeaderComponent } from './navigation/cookie/header/header.component';
 import { FooterComponent } from './navigation/cookie/footer/footer.component';
 import { AuthService } from './services/auth.service';
 import { ProductService } from './services/product/product.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -29,15 +30,19 @@ export class AppComponent implements OnInit {
 
   async initialize(): Promise<void> {
     await this.productService.getAll();
-
+  
     if (!this.user) {
       const token = localStorage.getItem("access_token");
-
+  
       if (token !== "undefined" && token !== null) {
-        const user = await this.authService.getUserData(token);
-        this.authService.setData({ userData:  {
-          ...user
-        }});
+        const userObservable = await this.authService.getUserData(token);
+        const user = await firstValueFrom(userObservable);
+        this.authService.setData({
+          userData: user,
+          accessToken: token,
+          refreshToken: localStorage.getItem("refresh_token"),
+          expireIn: localStorage.getItem("expire_in")
+        });
       }
     }
   }
