@@ -33,3 +33,9 @@ main {
 .hide {
   display: none;
 }
+
+.confirmation {
+  display: flex;
+  font-size: 32px;
+  justify-content: space-around;
+}

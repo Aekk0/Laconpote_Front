@@ -1,5 +1,4 @@
 .container {
-    height: calc(100vh - 12vh - 4vh);
     background-image: url("../../../../assets/background2.webp");
     background-size: cover;
 }
@@ -9,6 +8,7 @@
     padding-left: 22%;
     padding-right: 22%;
     padding-top: 2%;
+    min-height: 55vh;
 }
 
 p {
@@ -20,4 +20,16 @@ p {
 
 h1 {
     padding-top: 2%;
+}
+
+.img {
+    background-image: url("../../../../assets/bann.webp");
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+}
+
+.page {
+    min-height: calc(100vh - 12vh);
+    flex: wrap;
 }

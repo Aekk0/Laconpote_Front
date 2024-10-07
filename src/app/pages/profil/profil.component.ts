@@ -99,7 +99,7 @@ export class ProfilComponent implements OnInit {
         this.ZIPCode.reset();
         this.phone.reset();
 
-        this.message = "Addresse enregistrée";
+        this.message = "Adresse enregistrée";
       },
       error: (error) => {
         this.errorMessage.set(error.message);
