@@ -25,9 +25,9 @@ export interface RegisterOptions {
   providedIn: 'root'
 })
 export class AuthService {
-  private authURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/auth";
-  private userURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/user";
-  private addressURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/address";
+  private authURL = "http://localhost:3001/api/v1/auth";
+  private userURL = "http://localhost:3001/api/v1/user";
+  private addressURL = "http://localhost:3001/api/v1/address";
   currentUserSubject = new BehaviorSubject(null);
 
   public user$ = this.currentUserSubject.asObservable();
