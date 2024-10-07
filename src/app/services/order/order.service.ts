@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class OrderService {
-  private orderURL = "http://localhost:3001/api/v1/order";
+  private orderURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/order";
   currentOrderSubject = new BehaviorSubject(null);
 
   public order$ = this.currentOrderSubject.asObservable();

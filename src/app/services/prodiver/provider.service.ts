@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProviderService {
-  private providerURL = "http://localhost:3001/api/v1/provider";
+  private providerURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/provider";
   currentProviderSubject = new BehaviorSubject(null);
 
   public provider$ = this.currentProviderSubject.asObservable();

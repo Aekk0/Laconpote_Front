@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class ProductService {
-  private productURL = "http://localhost:3001/api/v1/product";
+  private productURL = "https://cookies-api-7996f284e7c0.herokuapp.com/api/v1/product";
   products: any;
 
   constructor(private http: HttpClient) { }
