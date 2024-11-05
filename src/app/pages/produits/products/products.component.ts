@@ -323,7 +323,7 @@ export class ProductsComponent implements OnInit {
       ]
     }
   ]
-  
+
 
   input: { name: string, ingredients: string[]; allergens: string[] } | null = null;
 
@@ -337,8 +337,8 @@ export class ProductsComponent implements OnInit {
 
     if (this.productService.products) {
       this.product = this.productService.products.find((product: any) => product.id === this.productId);
-      
-      this.input = this.productsComplementaryInformation.find((stateProducts) => stateProducts.name === this.product.name) || null; 
+
+      this.input = this.productsComplementaryInformation.find((stateProducts) => stateProducts.name === this.product.name) || null;
     }
   }
 }
