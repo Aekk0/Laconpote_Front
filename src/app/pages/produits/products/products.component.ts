@@ -256,6 +256,43 @@ export class ProductsComponent implements OnInit {
         "œufs",
         "lait"
       ]
+    },
+    {
+      name: "Éclat de Praline",
+      ingredients: [
+        "Farine de blé français",
+        "chocolat blanc pâtissier",
+        "cassonade",
+        "œufs",
+        "levure alsacienne",
+        "beurre de Vendée (lait 100% français)",
+        "Praline Rose de lyon (sucre, amande, sirop de glucose, amidon de manioc, agent de brillance : huile végétale, colorant)"
+      ],
+      allergens: [
+        "Gluten",
+        "œufs",
+        "lait",
+        "fruits à coques (Amandes)"
+      ]
+    },
+    {
+      name: "Pécan'Délice",
+      ingredients: [
+        "Farine de blé français",
+        "chocolat blanc pâtissier",
+        "cassonade",
+        "œufs",
+        "levure alsacienne",
+        "beurre de Vendée (lait 100% français)",
+        "noix de pécan",
+        "Caramel au beurre salé français (sucre, crème fraîche, beurre au sel de guérande, miel)"
+      ],
+      allergens: [
+        "Gluten",
+        "œufs",
+        "lait",
+        "fruits à coques (Noix)"
+      ]
     }
   ]
   
