@@ -31,5 +31,5 @@ h1 {
 
 .page {
     min-height: calc(100vh - 12vh);
-    flex: wrap;
+    margin-bottom: -27px;
 }
