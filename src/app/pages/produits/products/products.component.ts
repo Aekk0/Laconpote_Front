@@ -293,6 +293,34 @@ export class ProductsComponent implements OnInit {
         "lait",
         "fruits à coques (Noix)"
       ]
+    },
+    {
+      name: "Chaud'Colat (Lot de 2)",
+      ingredients: [
+        "Chocolat de couverture au lait à partir de fève de cacao de qualité supérieur (Pâte de cacao, beurre de cacao, LACTOSE, LAIT écrémé en poudre,sucre, extrait de malt d'orge, émulsifiant (lécithine de SOJA))",
+        "Cacao : 37% min, dont beurre de cacao : 32%. Matière sèche de LAIT : 18%",
+        "Poudre de cacao à 70%, mini marshmallows (sirop de glucose fructose, sucres, eau, gélatine, protéines de lait, arôme, dextrose)."
+      ],
+      allergens: [
+        "Soja",
+        "lait"
+      ]
+    },
+    {
+      name: "Écrin des Fêtes (9 pièces)",
+      ingredients: [
+        "Chocolat de couverture au lait à partir de fève de cacao de qualité supérieur (Pâte de cacao, beurre de cacao, LACTOSE, LAIT écrémé en poudre,sucre, extrait de malt d'orge, émulsifiant (lécithine de SOJA), arôme (vanilline).)",
+        "Cacao : 37% min, dont beurre de cacao : 32%. Matière sèche de LAIT : 18%",
+        "Chocolat de couverture noir à partir de fève de cacao de qualité supérieur (Pâte de cacao, beurre de cacao, Sucre, émulsifiant (lécithine de SOJA))",
+        "Cacao : 52% min, dont beurre de cacao 35%.",
+        "Chocolat de couverture blanc (Sucre, beurre de cacao, poudre de LAIT entier, émulsifiant : lécithine de SOJA, arôme naturel de vanille.",
+        "Caramel au beurre salé, noisettes, beurre de cacahuète, cacahuètes caramélisées."
+      ],
+      allergens: [
+        "Soja",
+        "lait",
+        "noix et arachide"
+      ]
     }
   ]
   
